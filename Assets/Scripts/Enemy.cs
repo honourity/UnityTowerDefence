@@ -3,8 +3,17 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour {
 
+	public int Health = 1;
+	public float Speed = 5;
+
 	private Transform _target;
 	private NavMeshAgent _navMeshAgent;
+
+	public void TakeDamage(int damage)
+	{
+		Health -= damage;
+		if (Health <= 0) GameObject.Destroy(gameObject);
+	}
 
 	private void Awake()
 	{
@@ -14,22 +23,7 @@ public class Enemy : MonoBehaviour {
 
 	private void Start()
 	{
+		_navMeshAgent.speed = Speed;
 		_navMeshAgent.SetDestination(_target.position);
-	}
-
-	private void Update()
-	{
-		_navMeshAgent.SetDestination(_target.position);
-	}
-
-	private void OnTriggerEnter(Collider collider)
-	{
-		Win();
-	}
-
-	private void Win()
-	{
-		GameManager.Instance.ObjectiveLivesRemaining--;
-		Destroy(gameObject);
 	}
 }
