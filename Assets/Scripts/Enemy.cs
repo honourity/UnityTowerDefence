@@ -17,6 +17,11 @@ public class Enemy : MonoBehaviour {
 		_navMeshAgent.SetDestination(_target.position);
 	}
 
+	private void Update()
+	{
+		_navMeshAgent.SetDestination(_target.position);
+	}
+
 	private void OnTriggerEnter(Collider collider)
 	{
 		Win();

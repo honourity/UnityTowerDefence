@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour {
 
 	[Header("Settings")]
 	public int SecondsBetweenWaves;
-	public int ObjectiveLives;
+	public int ObjectiveLives = 10;
 
 	[Header("Live Stats")]
 	public int TimeUntilNextWave;
@@ -33,14 +33,15 @@ public class GameManager : MonoBehaviour {
 	public int EnemiesKilled;
 	public int BuildingsRemaining;
 	public int BuildingsDestroyed;
-
-	private bool _gameOver;
-
-	private void Start()
+	
+	private void Awake()
 	{
 		BuildingsRemaining = Buildings.Length;
 		ObjectiveLivesRemaining = ObjectiveLives;
+	}
 
+	private void Start()
+	{
 		for (int i = 0; i < Buildings.Length; i++)
 		{
 			Buildings[i].AddDefenders(Random.Next(0, 3));
@@ -51,12 +52,23 @@ public class GameManager : MonoBehaviour {
 	{
 		if (ObjectiveLivesRemaining <= 0)
 		{
-			_gameOver = true;
+			EndGame();
 		}
 
 		if (Input.GetKey(KeyCode.S))
 		{
 			Instantiate(EnemyPrefab, EnemySpawn.position, EnemySpawn.rotation);
 		}
+	}
+
+	private void EndGame()
+	{
+		//todo - this needs to be done properly
+		TimeUntilNextWave = 0;
+		DefendersKilled = 0;
+		ObjectiveLivesRemaining = 0;
+		EnemiesKilled = 0;
+		BuildingsRemaining = 0;
+		BuildingsDestroyed = 0;
 	}
 }
