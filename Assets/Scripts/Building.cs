@@ -34,6 +34,7 @@ public class Building : MonoBehaviour {
 		var spawnPos = DefenderSpawn.transform.position + new Vector3(0.5f, 0.5f, -0.5f);
 		var offsetX = _defenders.Count % 5;
 		var offsetZ = -(_defenders.Count / 5);
+
 		spawnPos.x += offsetX;
 		spawnPos.z += offsetZ;
 		var defender = Instantiate(DefenderPrefab, spawnPos, DefenderSpawn.transform.rotation, gameObject.transform);

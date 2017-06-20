@@ -12,7 +12,11 @@ public class Enemy : MonoBehaviour {
 	public void TakeDamage(int damage)
 	{
 		Health -= damage;
-		if (Health <= 0) GameObject.Destroy(gameObject);
+		if (Health <= 0)
+		{
+			GameManager.Instance.EnemiesKilled++;
+			Destroy(gameObject);
+		}
 	}
 
 	private void Awake()
