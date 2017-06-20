@@ -19,12 +19,22 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public Building[] Buildings;
+	public Transform EnemySpawn;
+	public Enemy EnemyPrefab;
 
-	public void Awake()
+	public void Start()
 	{
 		for (int i = 0; i < Buildings.Length; i++)
 		{
-			Buildings[i].AddDefenders(Random.Next(0,3));
+			Buildings[i].AddDefenders(Random.Next(0, 3));
+		}
+	}
+
+	public void Update()
+	{
+		if (Input.GetKey(KeyCode.S))
+		{
+			Instantiate(EnemyPrefab, EnemySpawn.position, EnemySpawn.rotation);
 		}
 	}
 }

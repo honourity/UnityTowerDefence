@@ -20,14 +20,7 @@ public class Building : MonoBehaviour {
 		{
 			if (_defenders.Count < 25)
 			{
-				var spawnPos = DefenderSpawn.transform.position + new Vector3(0.5f, 0.5f, -0.5f);
-				var offsetX = _defenders.Count % 5;
-				var offsetZ = -(_defenders.Count / 5);
-				spawnPos.x += offsetX;
-				spawnPos.z += offsetZ;
-				var defender = Instantiate(DefenderPrefab, spawnPos, DefenderSpawn.transform.rotation, gameObject.transform);
-
-				_defenders.Add(defender);
+				SpawnDefender();
 			}
 			else
 			{
@@ -35,6 +28,17 @@ public class Building : MonoBehaviour {
 				break;
 			}
 		}
+	}
+	private void SpawnDefender()
+	{
+		var spawnPos = DefenderSpawn.transform.position + new Vector3(0.5f, 0.5f, -0.5f);
+		var offsetX = _defenders.Count % 5;
+		var offsetZ = -(_defenders.Count / 5);
+		spawnPos.x += offsetX;
+		spawnPos.z += offsetZ;
+		var defender = Instantiate(DefenderPrefab, spawnPos, DefenderSpawn.transform.rotation, gameObject.transform);
+		defender.transform.localScale = new Vector3(0.2f, 0.5f, 0.2f);
+		_defenders.Add(defender);
 	}
 
 	public void RemoveDefender()
