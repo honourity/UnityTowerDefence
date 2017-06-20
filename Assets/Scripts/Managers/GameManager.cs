@@ -8,8 +8,6 @@ public class GameManager : MonoBehaviour {
 	}
 	private static GameManager _instance;
 
-	private System.Random _random;
-
 	public System.Random Random
 	{
 		get
@@ -17,21 +15,45 @@ public class GameManager : MonoBehaviour {
 			return _random = _random ?? new System.Random();
 		}
 	}
+	private System.Random _random;
 
-	public Building[] Buildings;
+	[Header("Dependencies")]
 	public Transform EnemySpawn;
 	public Enemy EnemyPrefab;
+	public Building[] Buildings;
 
-	public void Start()
+	[Header("Settings")]
+	public int SecondsBetweenWaves;
+	public int ObjectiveLives;
+
+	[Header("Live Stats")]
+	public int TimeUntilNextWave;
+	public int DefendersKilled;
+	public int ObjectiveLivesRemaining;
+	public int EnemiesKilled;
+	public int BuildingsRemaining;
+	public int BuildingsDestroyed;
+
+	private bool _gameOver;
+
+	private void Start()
 	{
+		BuildingsRemaining = Buildings.Length;
+		ObjectiveLivesRemaining = ObjectiveLives;
+
 		for (int i = 0; i < Buildings.Length; i++)
 		{
 			Buildings[i].AddDefenders(Random.Next(0, 3));
 		}
 	}
 
-	public void Update()
+	private void Update()
 	{
+		if (ObjectiveLivesRemaining <= 0)
+		{
+			_gameOver = true;
+		}
+
 		if (Input.GetKey(KeyCode.S))
 		{
 			Instantiate(EnemyPrefab, EnemySpawn.position, EnemySpawn.rotation);

@@ -9,7 +9,7 @@ public class Building : MonoBehaviour {
 
 	private List<Defender> _defenders;
 
-	public void Awake()
+	private void Awake()
 	{
 		_defenders = new List<Defender>();
 	}
