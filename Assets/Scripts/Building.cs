@@ -20,7 +20,7 @@ public class Building : MonoBehaviour {
 		{
 			if (_defenders.Count < 25)
 			{
-				SpawnDefender();
+				AddDefender();
 			}
 			else
 			{
@@ -29,7 +29,7 @@ public class Building : MonoBehaviour {
 			}
 		}
 	}
-	private void SpawnDefender()
+	public void AddDefender()
 	{
 		var spawnPos = DefenderSpawn.transform.position + new Vector3(0.5f, 0.5f, -0.5f);
 		var offsetX = _defenders.Count % 5;
@@ -42,13 +42,18 @@ public class Building : MonoBehaviour {
 		_defenders.Add(defender);
 	}
 
-	public void RemoveDefender()
+	public bool RemoveDefender()
 	{
 		if (_defenders.Count > 0)
 		{
 			var lastDefender = _defenders.Last();
 			_defenders.Remove(lastDefender);
 			Destroy(lastDefender.gameObject);
+			return true;
+		}
+		else
+		{
+			return false;
 		}
 	}
 
@@ -58,5 +63,22 @@ public class Building : MonoBehaviour {
 		{
 			RemoveDefender();
 		}
+	}
+
+	private void OnMouseUpAsButton()
+	{
+		if (GameManager.Instance.DefenderSelected)
+		{
+			AddDefender();
+		}
+		else
+		{
+			if (!RemoveDefender())
+			{
+				GameManager.Instance.DefenderSelected = !GameManager.Instance.DefenderSelected;
+			}
+		}
+
+		GameManager.Instance.DefenderSelected = !GameManager.Instance.DefenderSelected;
 	}
 }

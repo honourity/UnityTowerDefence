@@ -29,7 +29,6 @@ public class GameManager : MonoBehaviour {
 	public float SecondsBetweenWaves = 10;
 	public int EnemiesPerWave = 5;
 	
-
 	[Header("Live Stats")]
 	public float TimeUntilNextWave;
 	public int WavesSurvived;
@@ -38,6 +37,8 @@ public class GameManager : MonoBehaviour {
 	public int EnemiesKilled;
 	public int BuildingsRemaining;
 	public int BuildingsDestroyed;
+
+	public bool DefenderSelected { get; set; }
 
 	private void Start()
 	{
@@ -108,6 +109,5 @@ public class GameManager : MonoBehaviour {
 	private void SpawnEnemy()
 	{
 		Instantiate(EnemyPrefab, EnemySpawn.position, EnemySpawn.rotation);
-
 	}
 }

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Defender : MonoBehaviour {
@@ -88,4 +87,22 @@ public class Defender : MonoBehaviour {
 		_laser.enabled = false;
 	}
 
+	private void OnMouseUpAsButton()
+	{
+		var parentBuilding = transform.parent.gameObject.GetComponent<Building>();
+
+		if (GameManager.Instance.DefenderSelected)
+		{
+			parentBuilding.AddDefender();
+		}
+		else
+		{
+			if (!parentBuilding.RemoveDefender())
+			{
+				GameManager.Instance.DefenderSelected = !GameManager.Instance.DefenderSelected;
+			}
+		}
+
+		GameManager.Instance.DefenderSelected = !GameManager.Instance.DefenderSelected;
+	}
 }
