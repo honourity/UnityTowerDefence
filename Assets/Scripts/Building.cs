@@ -7,18 +7,18 @@ public class Building : MonoBehaviour {
 	public Defender DefenderPrefab;
 	public Transform DefenderSpawn;
 
-	private List<Defender> _defenders;
+	public List<Defender> Defenders { get; private set; }
 
 	private void Awake()
 	{
-		_defenders = new List<Defender>();
+		Defenders = new List<Defender>();
 	}
 
 	public void AddDefenders(int numDefenders)
 	{
 		for (int i = 0; i < numDefenders; i++)
 		{
-			if (_defenders.Count < 25)
+			if (Defenders.Count < 25)
 			{
 				AddDefender();
 			}
@@ -32,22 +32,22 @@ public class Building : MonoBehaviour {
 	public void AddDefender()
 	{
 		var spawnPos = DefenderSpawn.transform.position + new Vector3(0.5f, 0.5f, -0.5f);
-		var offsetX = _defenders.Count % 5;
-		var offsetZ = -(_defenders.Count / 5);
+		var offsetX = Defenders.Count % 5;
+		var offsetZ = -(Defenders.Count / 5);
 
 		spawnPos.x += offsetX;
 		spawnPos.z += offsetZ;
 		var defender = Instantiate(DefenderPrefab, spawnPos, DefenderSpawn.transform.rotation, gameObject.transform);
 		defender.transform.localScale = new Vector3(0.2f, 0.5f, 0.2f);
-		_defenders.Add(defender);
+		Defenders.Add(defender);
 	}
 
 	public bool RemoveDefender()
 	{
-		if (_defenders.Count > 0)
+		if (Defenders.Count > 0)
 		{
-			var lastDefender = _defenders.Last();
-			_defenders.Remove(lastDefender);
+			var lastDefender = Defenders.Last();
+			Defenders.Remove(lastDefender);
 			Destroy(lastDefender.gameObject);
 			return true;
 		}
@@ -59,26 +59,9 @@ public class Building : MonoBehaviour {
 
 	public void RemoveAllDefenders()
 	{
-		for (int i = 0; i <= _defenders.Count; i++)
+		for (int i = 0; i <= Defenders.Count; i++)
 		{
 			RemoveDefender();
 		}
-	}
-
-	private void OnMouseUpAsButton()
-	{
-		if (GameManager.Instance.DefenderSelected)
-		{
-			AddDefender();
-		}
-		else
-		{
-			if (!RemoveDefender())
-			{
-				GameManager.Instance.DefenderSelected = !GameManager.Instance.DefenderSelected;
-			}
-		}
-
-		GameManager.Instance.DefenderSelected = !GameManager.Instance.DefenderSelected;
 	}
 }

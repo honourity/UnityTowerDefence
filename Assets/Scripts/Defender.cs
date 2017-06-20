@@ -86,23 +86,4 @@ public class Defender : MonoBehaviour {
 	{
 		_laser.enabled = false;
 	}
-
-	private void OnMouseUpAsButton()
-	{
-		var parentBuilding = transform.parent.gameObject.GetComponent<Building>();
-
-		if (GameManager.Instance.DefenderSelected)
-		{
-			parentBuilding.AddDefender();
-		}
-		else
-		{
-			if (!parentBuilding.RemoveDefender())
-			{
-				GameManager.Instance.DefenderSelected = !GameManager.Instance.DefenderSelected;
-			}
-		}
-
-		GameManager.Instance.DefenderSelected = !GameManager.Instance.DefenderSelected;
-	}
 }

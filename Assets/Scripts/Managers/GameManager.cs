@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Linq;
 using UnityEngine;
 
@@ -22,7 +23,9 @@ public class GameManager : MonoBehaviour {
 	[Header("Dependencies")]
 	public Transform EnemySpawn;
 	public Enemy EnemyPrefab;
+	public Defender DefenderPrefab;
 	public Building[] Buildings;
+	public LayerMask BuildingsLayerMask;
 
 	[Header("Settings")]
 	public int ObjectiveLives = 10;
@@ -38,7 +41,46 @@ public class GameManager : MonoBehaviour {
 	public int BuildingsRemaining;
 	public int BuildingsDestroyed;
 
-	public bool DefenderSelected { get; set; }
+	public bool DefenderSelected { get; private set; }
+	private GameObject _selectedDefender;
+
+	public void BuildingInteractionStarted(Building building)
+	{
+		if (DefenderSelected)
+		{
+			PlaceDefender(building);
+		}
+		else
+		{
+			SelectDefender(building);
+		}
+	}
+	public void BuildingInteractionEnded(Building building)
+	{
+		if (DefenderSelected)
+		{
+			PlaceDefender(building);
+		}
+	}
+	public void NoBuildingInteractionStarted()
+	{
+		if (DefenderSelected)
+		{
+			DropDefender();
+		}
+	}
+	public void NoBuildingInteractionEnded()
+	{
+		if (DefenderSelected)
+		{
+			DropDefender();
+		}
+	}
+
+	public void SpawnEnemy()
+	{
+		Instantiate(EnemyPrefab, EnemySpawn.position, EnemySpawn.rotation);
+	}
 
 	private void Start()
 	{
@@ -73,9 +115,10 @@ public class GameManager : MonoBehaviour {
 			ResetGame();
 		}
 
-		if (Input.GetKey(KeyCode.S))
+		if (DefenderSelected)
 		{
-			SpawnEnemy();
+			var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+			_selectedDefender.transform.position = ray.origin + ray.direction*30;
 		}
 	}
 
@@ -106,8 +149,26 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-	private void SpawnEnemy()
+	private void SelectDefender(Building building)
 	{
-		Instantiate(EnemyPrefab, EnemySpawn.position, EnemySpawn.rotation);
+		if (building.Defenders.Count > 0)
+		{
+			DefenderSelected = true;
+			building.RemoveDefender();
+			_selectedDefender = Instantiate(DefenderPrefab, gameObject.transform).gameObject;
+		}
+	}
+
+	private void PlaceDefender(Building building)
+	{
+		DefenderSelected = false;
+		building.AddDefender();
+		Destroy(_selectedDefender);
+	}
+
+	private void DropDefender()
+	{
+		DefenderSelected = false;
+		Destroy(_selectedDefender);
 	}
 }
