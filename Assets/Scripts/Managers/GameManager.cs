@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour {
 	public Defender DefenderPrefab;
 	public Building[] Buildings;
 	public LayerMask BuildingsLayerMask;
+	public LayerMask EnvironmentLayerMask;
 
 	[Header("Settings")]
 	public int ObjectiveLives = 10;
@@ -117,8 +118,12 @@ public class GameManager : MonoBehaviour {
 
 		if (DefenderSelected)
 		{
-			var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-			_selectedDefender.transform.position = ray.origin + ray.direction*30;
+			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+			RaycastHit hit;
+			if (Physics.Raycast(ray, out hit, Mathf.Infinity, EnvironmentLayerMask + BuildingsLayerMask))
+			{
+				_selectedDefender.transform.position = hit.point + new Vector3(0, 0.5f, 0);
+			}
 		}
 	}
 
