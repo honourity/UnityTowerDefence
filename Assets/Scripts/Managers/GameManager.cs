@@ -118,12 +118,17 @@ public class GameManager : MonoBehaviour {
 
 		if (DefenderSelected)
 		{
-			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-			RaycastHit hit;
-			if (Physics.Raycast(ray, out hit, Mathf.Infinity, EnvironmentLayerMask + BuildingsLayerMask))
-			{
-				_selectedDefender.transform.position = hit.point + new Vector3(0, 0.5f, 0);
-			}
+			FollowMousePosition();
+		}
+	}
+
+	private void FollowMousePosition()
+	{
+		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		RaycastHit hit;
+		if (Physics.Raycast(ray, out hit, Mathf.Infinity, EnvironmentLayerMask + BuildingsLayerMask))
+		{
+			_selectedDefender.transform.position = hit.point + new Vector3(0, 0.5f, 0);
 		}
 	}
 
@@ -161,6 +166,7 @@ public class GameManager : MonoBehaviour {
 			DefenderSelected = true;
 			building.RemoveDefender();
 			_selectedDefender = Instantiate(DefenderPrefab, gameObject.transform).gameObject;
+			FollowMousePosition();
 		}
 	}
 
