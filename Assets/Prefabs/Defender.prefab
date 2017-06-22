@@ -25,7 +25,8 @@ GameObject:
   - component: {fileID: 114632131727090706}
   - component: {fileID: 135301692600824518}
   - component: {fileID: 120008034443823300}
-  m_Layer: 0
+  - component: {fileID: 195529755460727928}
+  m_Layer: 10
   m_Name: Defender
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39,7 +40,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1363866858548978}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3, y: 0.5, z: 8.94}
+  m_LocalPosition: {x: 7.67648, y: 0.5, z: 11.154129}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -110,6 +111,7 @@ MonoBehaviour:
   AttackRange: 10
   AttackCooldown: 1
   AttackDamage: 1
+  outlineRenderers: []
 --- !u!120 &120008034443823300
 LineRenderer:
   m_ObjectHideFlags: 1
@@ -207,3 +209,24 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!195 &195529755460727928
+NavMeshAgent:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1363866858548978}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 1
+  m_Speed: 5
+  m_Acceleration: 500
+  avoidancePriority: 50
+  m_AngularSpeed: 1000
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.38
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 3
