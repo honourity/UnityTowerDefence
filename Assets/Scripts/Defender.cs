@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using cakeslice;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Defender : MonoBehaviour {
@@ -7,16 +9,24 @@ public class Defender : MonoBehaviour {
 	public float AttackCooldown = 2f;
 	public int AttackDamage = 1;
 
+	public bool Selected { get; set; }
+
+	private Defender _defenderComponent;
 	private List<Enemy> _enemiesInRange;
 	private SphereCollider _attackRangeCollider;
 	private LineRenderer _laser;
 	private float _currentAttackCooldown;
+
+	[HideInInspector]
+	public List<Outline> outlineRenderers;
 
 	private void Awake()
 	{
 		_enemiesInRange = new List<Enemy>();
 		_attackRangeCollider = GetComponent<SphereCollider>();
 		_laser = GetComponent<LineRenderer>();
+
+		SetupOutlineRenderers();
 	}
 
 	private void Start()
@@ -26,6 +36,14 @@ public class Defender : MonoBehaviour {
 
 	private void Update()
 	{
+		if (InputManager.Instance.IsWithinSelectionBounds(gameObject))
+		{
+			if (!GameManager.Instance.SelectedDefenders.Contains(this)) GameManager.Instance.SelectedDefenders.Add(this);
+			Selected = true;
+		}
+
+		SetOutlineRenderers();
+
 		_currentAttackCooldown = Mathf.MoveTowards(_currentAttackCooldown, 0, Time.deltaTime);
 
 		if (_currentAttackCooldown < 0.01)
@@ -85,5 +103,38 @@ public class Defender : MonoBehaviour {
 	private void TurnOffLaser()
 	{
 		_laser.enabled = false;
+	}
+
+	private void SetupOutlineRenderers()
+	{
+		List<MeshRenderer> meshRenderers = gameObject.GetComponents<MeshRenderer>().ToList();
+
+		int count = gameObject.transform.childCount;
+		if (count > 0)
+		{
+			for (int i = 0; i < count; i++)
+			{
+				var child = gameObject.transform.GetChild(i);
+				meshRenderers.AddRange(child.gameObject.GetComponents<MeshRenderer>());
+			}
+		}
+
+		foreach (var meshRenderer in meshRenderers)
+		{
+			var outlineRenderer = meshRenderer.gameObject.AddComponent<Outline>();
+			outlineRenderers.Add(outlineRenderer);
+		}
+	}
+
+	private void SetOutlineRenderers()
+	{
+		if (Selected)
+		{
+			outlineRenderers.ForEach(renderer => renderer.enabled = true);
+		}
+		else
+		{
+			outlineRenderers.ForEach(renderer => renderer.enabled = false);
+		}
 	}
 }
