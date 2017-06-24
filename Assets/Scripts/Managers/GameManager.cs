@@ -31,7 +31,10 @@ public class GameManager : MonoBehaviour {
 	[Header("Settings")]
 	public int ObjectiveLives = 10;
 	public float SecondsBetweenWaves = 10;
-	public int EnemiesPerWave = 5;
+	public int EnemyStartQuantity; /* the number of enemies you want the first wave to have + EnemyNextWaveIncrease */
+	public int EnemyNextWaveIncrease;
+	public int EnemyStandardWaveQuantity;
+	public int MaxNumberOfWaves; 
 	
 	[Header("Live Stats")]
 	public float TimeUntilNextWave;
@@ -87,7 +90,7 @@ public class GameManager : MonoBehaviour {
 	{
 		BuildingsRemaining = Buildings.Length;
 		ObjectiveLivesRemaining = ObjectiveLives;
-		TimeUntilNextWave = 3f;
+		TimeUntilNextWave = 10;
 
 		WavesSurvived = 0;
 		DefendersKilled = 0;
@@ -109,6 +112,7 @@ public class GameManager : MonoBehaviour {
 			WavesSurvived++;
 			TimeUntilNextWave = SecondsBetweenWaves;
 			StartCoroutine(SpawnWave());
+			EnemyNextWaveIncrease = EnemyNextWaveIncrease + EnemyStandardWaveQuantity;
 		}
 
 		if (ObjectiveLivesRemaining <= 0)
@@ -149,9 +153,9 @@ public class GameManager : MonoBehaviour {
 
 	private IEnumerator SpawnWave()
 	{
-		var spawned = EnemiesPerWave;
+		var spawned = EnemyStartQuantity + EnemyNextWaveIncrease;
 
-		while (spawned > 0)
+		while (spawned > 0 && WavesSurvived <= MaxNumberOfWaves)
 		{
 			SpawnEnemy();
 			spawned--;

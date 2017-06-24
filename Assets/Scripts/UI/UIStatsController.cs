@@ -11,19 +11,20 @@ public class UIStatsController : MonoBehaviour
 	{
 		_slider.minValue = 0;
 		_slider.maxValue = GameManager.Instance.SecondsBetweenWaves;
+		_wavesCount.text = "0";
 	}
 
 	private void Update()
 	{
 		_slider.value = GameManager.Instance.TimeUntilNextWave;
 
-		_wavesCount.text = (GameManager.Instance.WavesSurvived + 1).ToString();
+		_wavesCount.text = (GameManager.Instance.WavesSurvived).ToString();
 
 		_summary.text = string.Format("Defender Deaths: {0}      Buildings Remaining: {1}   Lives Remaining: {2}\nEnemies Per Wave: {3}   Enemies Killed: {4}",
 			GameManager.Instance.DefendersKilled,
 			GameManager.Instance.BuildingsRemaining,
 			GameManager.Instance.ObjectiveLivesRemaining,
-			GameManager.Instance.EnemiesPerWave,
+			GameManager.Instance.EnemyStartQuantity,
 			GameManager.Instance.EnemiesKilled);
 	}
 }
