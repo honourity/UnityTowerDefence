@@ -18,7 +18,7 @@ public class Building : MonoBehaviour {
 	{
 		for (int i = 0; i < numDefenders; i++)
 		{
-			if (Defenders.Count < 25)
+			if (Defenders.Count < 20)
 			{
 				AddDefender();
 			}
