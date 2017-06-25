@@ -1,67 +1,24 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-using System.Linq;
+﻿using UnityEngine;
 
 public class Building : MonoBehaviour {
 
-	public Defender DefenderPrefab;
-	public Transform DefenderSpawn;
+	public GameObject TopSection;
+	public Transform[] Emplacements;
 
-	public List<Defender> Defenders { get; private set; }
+	public Defender[] Defenders { get; private set; }
 
 	private void Awake()
 	{
-		Defenders = new List<Defender>();
+		Defenders = new Defender[Emplacements.Length];
 	}
 
-	public void AddDefenders(int numDefenders)
+	private void OnMouseEnter()
 	{
-		for (int i = 0; i < numDefenders; i++)
-		{
-			if (Defenders.Count < 25)
-			{
-				AddDefender();
-			}
-			else
-			{
-				Debug.Log("No defenders added to " + gameObject.name + " because it it full already!");
-				break;
-			}
-		}
-	}
-	public void AddDefender()
-	{
-		var spawnPos = DefenderSpawn.transform.position + new Vector3(0.5f, 0.5f, -0.5f);
-		var offsetX = Defenders.Count % 5;
-		var offsetZ = -(Defenders.Count / 5);
-
-		spawnPos.x += offsetX;
-		spawnPos.z += offsetZ;
-		var defender = Instantiate(DefenderPrefab, spawnPos, DefenderSpawn.transform.rotation, gameObject.transform);
-		defender.transform.localScale = new Vector3(0.2f, 0.5f, 0.2f);
-		Defenders.Add(defender);
+		TopSection.SetActive(false);
 	}
 
-	public bool RemoveDefender()
+	private void OnMouseExit()
 	{
-		if (Defenders.Count > 0)
-		{
-			var lastDefender = Defenders.Last();
-			Defenders.Remove(lastDefender);
-			Destroy(lastDefender.gameObject);
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	public void RemoveAllDefenders()
-	{
-		for (int i = 0; i <= Defenders.Count; i++)
-		{
-			RemoveDefender();
-		}
+		TopSection.SetActive(true);
 	}
 }
