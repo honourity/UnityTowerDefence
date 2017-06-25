@@ -36,11 +36,11 @@ public class Defender : MonoBehaviour {
 
 	private void Update()
 	{
-		if (InputManager.Instance.IsWithinSelectionBounds(gameObject))
-		{
-			if (!GameManager.Instance.SelectedDefenders.Contains(this)) GameManager.Instance.SelectedDefenders.Add(this);
-			Selected = true;
-		}
+		//if (InputManager.Instance.IsWithinSelectionBounds(gameObject))
+		//{
+		//	if (!GameManager.Instance.SelectedDefenders.Contains(this)) GameManager.Instance.SelectedDefenders.Add(this);
+		//	Selected = true;
+		//}
 
 		SetOutlineRenderers();
 

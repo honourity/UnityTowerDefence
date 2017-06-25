@@ -29,6 +29,8 @@ public class GameManager : MonoBehaviour {
 	public Building[] Buildings;
 	public LayerMask DefendersLayer;
 	public LayerMask EnvironmentLayer;
+	public LayerMask BuildingsLayer;
+	public LayerMask EmplacementsLayer;
 
 	[Header("Settings")]
 	public int ObjectiveLives = 10;
@@ -44,7 +46,9 @@ public class GameManager : MonoBehaviour {
 	public int BuildingsRemaining;
 	public int BuildingsDestroyed;
 
-	public List<Defender> SelectedDefenders;
+	//public List<Defender> SelectedDefenders;
+	public Defender SelectedDefender { get; set; }
+	public Emplacement HighlightedEmplacement { get; set; }
 
 	public void SpawnEnemy()
 	{
@@ -53,19 +57,30 @@ public class GameManager : MonoBehaviour {
 
 	public void ClearDefenderSelection()
 	{
-		SelectedDefenders.ForEach(defender => defender.Selected = false);
-		SelectedDefenders.Clear();
+		//SelectedDefenders.ForEach(defender => defender.Selected = false);
+		//SelectedDefenders.Clear();
+
+		SelectedDefender = null;
 	}
 
 	public void MoveSelectedDefenders(Vector3 location)
 	{
-		SelectedDefenders.ForEach(defender => defender.GetComponent<NavMeshAgent>().SetDestination(location));
+		//SelectedDefenders.ForEach(defender => );
+
+		//get highlighted emplacement's transform position
+		if (HighlightedEmplacement != null && HighlightedEmplacement.Occupant == null)
+		{
+
+			//needs a lot more logic around navmesh. when arriving, become occupant of emplacement, double check arrival from navmesh.
+			//only try to go there if that emplacement is empty already etc etc
+			SelectedDefender.GetComponent<NavMeshAgent>().SetDestination(HighlightedEmplacement.transform.position);
+		}
 	}
 
-	private void Awake()
-	{
-		SelectedDefenders = new List<Defender>();
-	}
+	//private void Awake()
+	//{
+	//	SelectedDefenders = new List<Defender>();
+	//}
 
 	private void Start()
 	{

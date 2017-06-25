@@ -3,22 +3,34 @@
 public class Building : MonoBehaviour {
 
 	public GameObject TopSection;
-	public Transform[] Emplacements;
+	public GameObject EmplacementPrefab;
+	public Transform[] EmplacementLocations;
 
 	public Defender[] Defenders { get; private set; }
 
+	public bool MouseHovering { get; set; }
+
 	private void Awake()
 	{
-		Defenders = new Defender[Emplacements.Length];
+		Defenders = new Defender[EmplacementLocations.Length];
+
+		foreach (var position in EmplacementLocations)
+		{
+			Instantiate(EmplacementPrefab, position.position, position.rotation, transform);
+		}
 	}
 
-	private void OnMouseEnter()
+	private void Update()
 	{
-		TopSection.SetActive(false);
-	}
+		if (MouseHovering)
+		{
+			TopSection.SetActive(false);
+		}
+		else
+		{
+			TopSection.SetActive(true);
+		}
 
-	private void OnMouseExit()
-	{
-		TopSection.SetActive(true);
+		MouseHovering = false;
 	}
 }
