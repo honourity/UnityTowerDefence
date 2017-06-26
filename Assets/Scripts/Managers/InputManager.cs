@@ -17,11 +17,8 @@ public class InputManager : MonoBehaviour
 		if (Physics.Raycast(mouseRay, out emplacementsHit, Mathf.Infinity, GameManager.Instance.EmplacementsLayer))
 		{
 			var emplacement = emplacementsHit.transform.gameObject.GetComponent<Emplacement>();
-			if (emplacement.Occupant == null)
-			{
-				GameManager.Instance.HighlightedEmplacement = emplacement;
-				GameManager.Instance.HighlightedEmplacement.MouseHovering = true;
-			}
+			emplacement.MouseHovering = true;
+			GameManager.Instance.HighlightedEmplacement = emplacement;
 		}
 		else
 		{

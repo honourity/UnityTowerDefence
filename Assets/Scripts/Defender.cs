@@ -55,39 +55,49 @@ public class Defender : MonoBehaviour {
 
 		if (_currentAttackCooldown < 0.01)
 		{
-			Enemy closestEnemy = null;
-			var closestDistance = Mathf.Infinity;
+			DoAttack();
+		}
+	}
 
-			_enemiesInRange.RemoveAll(e => e == null);
+	private void DoAttack()
+	{
+		//todo - redesign this attack method to grab stats from CurrentEmplacement
+		// calculate view angle / firing arc
+		// prioritise enemies within firing arc, closest to objective
 
-			foreach (var enemyInRange in _enemiesInRange)
+
+		Enemy closestEnemy = null;
+		var closestDistance = Mathf.Infinity;
+
+		_enemiesInRange.RemoveAll(e => e == null);
+
+		foreach (var enemyInRange in _enemiesInRange)
+		{
+			if (closestEnemy == null)
 			{
-				if (closestEnemy == null)
+				closestEnemy = enemyInRange;
+				continue;
+			}
+			else
+			{
+				var distance = Vector3.Distance(gameObject.transform.position, enemyInRange.transform.position);
+				if (distance < closestDistance)
 				{
+					closestDistance = distance;
 					closestEnemy = enemyInRange;
-					continue;
-				}
-				else
-				{
-					var distance = Vector3.Distance(gameObject.transform.position, enemyInRange.transform.position);
-					if (distance < closestDistance)
-					{
-						closestDistance = distance;
-						closestEnemy = enemyInRange;
-					}
 				}
 			}
+		}
 
-			if (closestEnemy != null)
-			{
-				Debug.DrawLine(gameObject.transform.position, closestEnemy.transform.position, Color.yellow, 0.5f);
-				_laser.SetPositions(new Vector3[2] { gameObject.transform.position, closestEnemy.transform.position });
-				_laser.enabled = true;
-				Invoke("TurnOffLaser", 0.125f);
-				_currentAttackCooldown = AttackCooldown;
+		if (closestEnemy != null)
+		{
+			Debug.DrawLine(gameObject.transform.position, closestEnemy.transform.position, Color.yellow, 0.5f);
+			_laser.SetPositions(new Vector3[2] { gameObject.transform.position, closestEnemy.transform.position });
+			_laser.enabled = true;
+			Invoke("TurnOffLaser", 0.125f);
+			_currentAttackCooldown = AttackCooldown;
 
-				closestEnemy.TakeDamage(AttackDamage);
-			}
+			closestEnemy.TakeDamage(AttackDamage);
 		}
 	}
 

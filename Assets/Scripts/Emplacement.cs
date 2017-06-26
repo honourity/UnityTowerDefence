@@ -2,17 +2,19 @@
 
 public class Emplacement : MonoBehaviour {
 
-	public float BaseAttackRange;
-	public float BaseFiringArcAngle;
+	public float Angle;
+	public float Range;
 
 	public Defender Occupant { get; set; }
 	public bool MouseHovering { get; set; }
 
+	private LineRenderer _lineRenderer;
 	private GameObject _highlightIndicator;
 
 	private void Awake()
 	{
 		_highlightIndicator = transform.Find("HighlightIndividual").gameObject;
+		_lineRenderer = GetComponent<LineRenderer>();
 	}
 
 	private void Update()
@@ -25,12 +27,41 @@ public class Emplacement : MonoBehaviour {
 		if (MouseHovering)
 		{
 			_highlightIndicator.SetActive(true);
+			CalculateArcVisualisation();
+			//_arcVisualisation.SetActive(true);
 		}
 		else
 		{
 			_highlightIndicator.SetActive(false);
+			//_arcVisualisation.SetActive(false);
 		}
 
 		MouseHovering = false;
+	}
+
+	private void CalculateArcVisualisation()
+	{
+		
+		_lineRenderer.SetPositions(new Vector3[3] {
+			Vector3.zero,
+			Vector3.zero + (transform.forward * Range) - (transform.right * Angle),
+			Vector3.zero + (transform.forward * Range) + (transform.right * Angle),
+		});
+		_lineRenderer.loop = true;
+
+		if (GameManager.Instance.SelectedDefender != null)
+		{
+			//use selected defender as reference
+		}
+		else if (Occupant != null)
+		{
+			//use occupant as reference
+		}
+		else
+		{
+			//use a fixed default base value as reference
+			// something clear and sensible just for visual reference
+			// but smaller than most defenders' base values so its clear that its a reference value
+		}
 	}
 }
