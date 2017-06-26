@@ -1023,7 +1023,6 @@ MonoBehaviour:
   EnemiesKilled: 0
   BuildingsRemaining: 0
   BuildingsDestroyed: 0
-  SelectedDefenders: []
 --- !u!4 &1016985109
 Transform:
   m_ObjectHideFlags: 0
@@ -1085,6 +1084,21 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4160475259866416, guid: 1130a05b878f0d2419d561ef4ec44b61, type: 2}
       propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 135301692600824518, guid: 1130a05b878f0d2419d561ef4ec44b61,
+        type: 2}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 135301692600824518, guid: 1130a05b878f0d2419d561ef4ec44b61,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 65343254845551998, guid: 1130a05b878f0d2419d561ef4ec44b61,
+        type: 2}
+      propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

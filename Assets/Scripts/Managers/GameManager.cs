@@ -46,7 +46,6 @@ public class GameManager : MonoBehaviour {
 	public int BuildingsRemaining;
 	public int BuildingsDestroyed;
 
-	//public List<Defender> SelectedDefenders;
 	public Defender SelectedDefender { get; set; }
 	public Emplacement HighlightedEmplacement { get; set; }
 
@@ -55,25 +54,19 @@ public class GameManager : MonoBehaviour {
 		Instantiate(EnemyPrefab, EnemySpawn.position, EnemySpawn.rotation);
 	}
 
-	public void ClearDefenderSelection()
+	public void SelectDefender(Defender defender)
 	{
-		//SelectedDefenders.ForEach(defender => defender.Selected = false);
-		//SelectedDefenders.Clear();
-
-		SelectedDefender = null;
+		if (SelectedDefender != null) SelectedDefender.Selected = false;
+		SelectedDefender = defender;
+		if (defender != null) defender.Selected = true;
 	}
 
-	public void MoveSelectedDefenders(Vector3 location)
+	public void MoveSelectedDefender(Vector3 location)
 	{
-		//SelectedDefenders.ForEach(defender => );
-
-		//get highlighted emplacement's transform position
 		if (HighlightedEmplacement != null && HighlightedEmplacement.Occupant == null)
 		{
-
-			//needs a lot more logic around navmesh. when arriving, become occupant of emplacement, double check arrival from navmesh.
-			//only try to go there if that emplacement is empty already etc etc
-			SelectedDefender.GetComponent<NavMeshAgent>().SetDestination(HighlightedEmplacement.transform.position);
+			SelectedDefender.GetComponent<NavMeshAgent>().SetDestination(location);
+			HighlightedEmplacement.Occupant = SelectedDefender;
 		}
 	}
 

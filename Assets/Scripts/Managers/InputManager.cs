@@ -18,44 +18,38 @@ public class InputManager : MonoBehaviour
 		RaycastHit emplacementsHit;
 		if (Physics.Raycast(mouseRay, out emplacementsHit, Mathf.Infinity, GameManager.Instance.EmplacementsLayer))
 		{
-			emplacementsHit.collider.gameObject.GetComponent<Emplacement>().MouseHovering = true;
+			GameManager.Instance.HighlightedEmplacement = emplacementsHit.transform.gameObject.GetComponent<Emplacement>();
+			GameManager.Instance.HighlightedEmplacement.MouseHovering = true;
+		}
+		else
+		{
+			GameManager.Instance.HighlightedEmplacement = null;
 		}
 
 		RaycastHit buildingsHit;
 		if (Physics.Raycast(mouseRay, out buildingsHit, Mathf.Infinity, GameManager.Instance.BuildingsLayer))
 		{
-			buildingsHit.collider.gameObject.GetComponent<Building>().MouseHovering = true;
+			buildingsHit.transform.gameObject.GetComponent<Building>().MouseHovering = true;
 		}
-
-
 
 		if (Input.GetMouseButtonDown(0))
 		{
-			GameManager.Instance.ClearDefenderSelection();
-
-			////box selection
-			//SelectionInProgress = true;
-			//mousePosition1 = Input.mousePosition;
-
-			//selecting single target
 			RaycastHit hit;
 			if (Physics.Raycast(mouseRay, out hit, Mathf.Infinity, GameManager.Instance.DefendersLayer))
 			{
-				hit.collider.gameObject.GetComponent<Defender>().Selected = true;
+				GameManager.Instance.SelectDefender(hit.transform.gameObject.GetComponent<Defender>());
+			}
+			else
+			{
+				GameManager.Instance.SelectDefender(null);
 			}
 		}
-		//else if (Input.GetMouseButtonUp(0))
-		//{
-		//	//box selection
-		//	SelectionInProgress = false;
-		//}
 		else if (Input.GetMouseButtonDown(1))
 		{
-			//initiate move command to all selected units via GameManager
-			RaycastHit hit;
-			if (Physics.Raycast(mouseRay, out hit, Mathf.Infinity, GameManager.Instance.EnvironmentLayer))
+			if (GameManager.Instance.HighlightedEmplacement != null
+				&& GameManager.Instance.HighlightedEmplacement.Occupant == null)
 			{
-				GameManager.Instance.MoveSelectedDefenders(hit.point);
+				GameManager.Instance.MoveSelectedDefender(emplacementsHit.transform.position);
 			}
 		}
 		else if (Input.GetMouseButtonDown(2))

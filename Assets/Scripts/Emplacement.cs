@@ -9,11 +9,11 @@ public class Emplacement : MonoBehaviour {
 
 	public bool MouseHovering { get; set; }
 
-	private GameObject highlightIndividual;
+	private GameObject _highlightIndividual;
 
 	private void Awake()
 	{
-		highlightIndividual = transform.Find("HighlightIndividual").gameObject;
+		_highlightIndividual = transform.Find("HighlightIndividual").gameObject;
 	}
 
 	private void Update()
@@ -35,11 +35,11 @@ public class Emplacement : MonoBehaviour {
 	{
 		if (MouseHovering)
 		{
-			highlightIndividual.SetActive(true);
+			_highlightIndividual.SetActive(true);
 		}
 		else
 		{
-			highlightIndividual.SetActive(false);
+			_highlightIndividual.SetActive(false);
 		}
 
 		MouseHovering = false;
