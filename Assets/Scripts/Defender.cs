@@ -10,12 +10,25 @@ public class Defender : MonoBehaviour {
 	public int AttackDamage = 1;
 
 	public bool Selected { get; set; }
+	public Emplacement CurrentEmplacement
+	{
+		get
+		{
+			return _currentEmplacement;
+		}
+		set
+		{
+			if (_currentEmplacement != null) _currentEmplacement.Occupant = null;
+			_currentEmplacement = value;
+			if (_currentEmplacement != null) _currentEmplacement.Occupant = this;
+		}
+	}
 
-	private Defender _defenderComponent;
 	private List<Enemy> _enemiesInRange;
 	private SphereCollider _attackRangeCollider;
 	private LineRenderer _laser;
 	private float _currentAttackCooldown;
+	private Emplacement _currentEmplacement;
 
 	[HideInInspector]
 	public List<Outline> outlineRenderers;
@@ -36,12 +49,6 @@ public class Defender : MonoBehaviour {
 
 	private void Update()
 	{
-		//if (InputManager.Instance.IsWithinSelectionBounds(gameObject))
-		//{
-		//	if (!GameManager.Instance.SelectedDefenders.Contains(this)) GameManager.Instance.SelectedDefenders.Add(this);
-		//	Selected = true;
-		//}
-
 		SetOutlineRenderers();
 
 		_currentAttackCooldown = Mathf.MoveTowards(_currentAttackCooldown, 0, Time.deltaTime);

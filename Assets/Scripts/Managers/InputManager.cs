@@ -9,8 +9,6 @@ public class InputManager : MonoBehaviour
 	}
 	private static InputManager _instance;
 
-	//public bool SelectionInProgress { get; private set; }
-
 	private void Update()
 	{
 		var mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -18,8 +16,12 @@ public class InputManager : MonoBehaviour
 		RaycastHit emplacementsHit;
 		if (Physics.Raycast(mouseRay, out emplacementsHit, Mathf.Infinity, GameManager.Instance.EmplacementsLayer))
 		{
-			GameManager.Instance.HighlightedEmplacement = emplacementsHit.transform.gameObject.GetComponent<Emplacement>();
-			GameManager.Instance.HighlightedEmplacement.MouseHovering = true;
+			var emplacement = emplacementsHit.transform.gameObject.GetComponent<Emplacement>();
+			if (emplacement.Occupant == null)
+			{
+				GameManager.Instance.HighlightedEmplacement = emplacement;
+				GameManager.Instance.HighlightedEmplacement.MouseHovering = true;
+			}
 		}
 		else
 		{
@@ -37,7 +39,7 @@ public class InputManager : MonoBehaviour
 			RaycastHit hit;
 			if (Physics.Raycast(mouseRay, out hit, Mathf.Infinity, GameManager.Instance.DefendersLayer))
 			{
-				GameManager.Instance.SelectDefender(hit.transform.gameObject.GetComponent<Defender>());
+				GameManager.Instance.SelectDefender(hit.transform.parent.gameObject.GetComponent<Defender>());
 			}
 			else
 			{
@@ -46,7 +48,8 @@ public class InputManager : MonoBehaviour
 		}
 		else if (Input.GetMouseButtonDown(1))
 		{
-			if (GameManager.Instance.HighlightedEmplacement != null
+			if (GameManager.Instance.SelectedDefender != null
+				&& GameManager.Instance.HighlightedEmplacement != null
 				&& GameManager.Instance.HighlightedEmplacement.Occupant == null)
 			{
 				GameManager.Instance.MoveSelectedDefender(emplacementsHit.transform.position);

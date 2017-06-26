@@ -65,15 +65,10 @@ public class GameManager : MonoBehaviour {
 	{
 		if (HighlightedEmplacement != null && HighlightedEmplacement.Occupant == null)
 		{
+			SelectedDefender.CurrentEmplacement = HighlightedEmplacement;
 			SelectedDefender.GetComponent<NavMeshAgent>().SetDestination(location);
-			HighlightedEmplacement.Occupant = SelectedDefender;
 		}
 	}
-
-	//private void Awake()
-	//{
-	//	SelectedDefenders = new List<Defender>();
-	//}
 
 	private void Start()
 	{
