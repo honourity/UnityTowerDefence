@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Defender : MonoBehaviour {
 
@@ -22,6 +23,7 @@ public class Defender : MonoBehaviour {
 			if (_currentEmplacement != null) _currentEmplacement.Occupant = this;
 		}
 	}
+	public NavMeshAgent NavMeshAgent { get; private set; }
 
 	private LineRenderer _laser;
 	private float _currentAttackCooldown;
@@ -32,6 +34,8 @@ public class Defender : MonoBehaviour {
 
 	private void Awake()
 	{
+		NavMeshAgent = GetComponent<NavMeshAgent>();
+
 		_laser = GetComponent<LineRenderer>();
 		_unitVision = GetComponent<UnitVision>();
 

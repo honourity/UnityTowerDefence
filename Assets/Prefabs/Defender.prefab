@@ -19,11 +19,13 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4841783620295790}
+  - component: {fileID: 33957293113745898}
+  - component: {fileID: 23954786516331560}
   - component: {fileID: 65027101602367104}
   - component: {fileID: 195281474421599356}
-  - component: {fileID: 120050447572173922}
   - component: {fileID: 114275048285557554}
   - component: {fileID: 114939814211391484}
+  - component: {fileID: 120050447572173922}
   m_Layer: 10
   m_Name: Defender
   m_TagString: Untagged
@@ -31,56 +33,25 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1939859097918652
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 4766738504754014}
-  - component: {fileID: 33025712602141212}
-  - component: {fileID: 23278355365288640}
-  m_Layer: 0
-  m_Name: Mesh
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4766738504754014
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1939859097918652}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4841783620295790}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4841783620295790
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1800666341468914}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0.6562902, z: -0, w: 0.7545087}
+  m_LocalPosition: {x: 13.25, y: 0.5, z: -0.77}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 4766738504754014}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!23 &23278355365288640
+  m_LocalEulerAnglesHint: {x: 0, y: -82.035, z: 0}
+--- !u!23 &23954786516331560
 MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1939859097918652}
+  m_GameObject: {fileID: 1800666341468914}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -96,7 +67,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_PreserveUVs: 1
+  m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
   m_SelectedEditorRenderState: 3
@@ -107,12 +78,12 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!33 &33025712602141212
+--- !u!33 &33957293113745898
 MeshFilter:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1939859097918652}
+  m_GameObject: {fileID: 1800666341468914}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!65 &65027101602367104
 BoxCollider:
@@ -125,7 +96,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0.5, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &114275048285557554
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -137,8 +108,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ad3d6ad6854f9a4388a1a73b95200be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AttackDamage: 1
-  AttackCooldown: 2
+  AttackDamage: 0
+  AttackCooldown: 0.5
 --- !u!114 &114939814211391484
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -158,8 +129,7 @@ MonoBehaviour:
   ObstaclesMask:
     serializedVersion: 2
     m_Bits: 768
-  VisibleTargets:
-  - {fileID: 0}
+  VisibleTargets: []
   ClosestTarget: {fileID: 0}
 --- !u!120 &120050447572173922
 LineRenderer:
@@ -259,11 +229,11 @@ NavMeshAgent:
   m_Acceleration: 500
   avoidancePriority: 50
   m_AngularSpeed: 1000
-  m_StoppingDistance: 0
+  m_StoppingDistance: 1
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 1
-  m_BaseOffset: 0
+  m_BaseOffset: 0.425
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4

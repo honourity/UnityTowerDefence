@@ -17,6 +17,12 @@ public class Emplacement : MonoBehaviour {
 
 	private void Update()
 	{
+		if (Occupant != null && Vector3.Distance(Occupant.transform.position, transform.position) < 1f)
+		{
+			Occupant.NavMeshAgent.ResetPath();
+			Occupant.transform.SetPositionAndRotation(transform.position + new Vector3(0f,0.5f,0f), transform.rotation);
+		}
+
 		ProcessHighlighting();
 	}
 
@@ -25,34 +31,12 @@ public class Emplacement : MonoBehaviour {
 		if (MouseHovering)
 		{
 			_highlightIndicator.SetActive(true);
-			CalculateArcVisualisation();
-			//_arcVisualisation.SetActive(true);
 		}
 		else
 		{
 			_highlightIndicator.SetActive(false);
-			//_arcVisualisation.SetActive(false);
 		}
 
 		MouseHovering = false;
-	}
-
-	private void CalculateArcVisualisation()
-	{
-
-		if (GameManager.Instance.SelectedDefender != null)
-		{
-			//use selected defender as reference
-		}
-		else if (Occupant != null)
-		{
-			//use occupant as reference
-		}
-		else
-		{
-			//use a fixed default base value as reference
-			// something clear and sensible just for visual reference
-			// but smaller than most defenders' base values so its clear that its a reference value
-		}
 	}
 }
