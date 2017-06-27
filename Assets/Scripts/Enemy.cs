@@ -28,6 +28,6 @@ public class Enemy : MonoBehaviour {
 	private void Start()
 	{
 		_navMeshAgent.speed = Speed;
-		_navMeshAgent.SetDestination(_target.position);
+		//_navMeshAgent.SetDestination(_target.position);
 	}
 }

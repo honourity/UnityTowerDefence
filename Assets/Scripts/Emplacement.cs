@@ -8,13 +8,11 @@ public class Emplacement : MonoBehaviour {
 	public Defender Occupant { get; set; }
 	public bool MouseHovering { get; set; }
 
-	private LineRenderer _lineRenderer;
 	private GameObject _highlightIndicator;
 
 	private void Awake()
 	{
 		_highlightIndicator = transform.Find("HighlightIndividual").gameObject;
-		_lineRenderer = GetComponent<LineRenderer>();
 	}
 
 	private void Update()
@@ -41,13 +39,6 @@ public class Emplacement : MonoBehaviour {
 
 	private void CalculateArcVisualisation()
 	{
-		
-		_lineRenderer.SetPositions(new Vector3[3] {
-			Vector3.zero,
-			Vector3.zero + (transform.forward * Range) - (transform.right * Angle),
-			Vector3.zero + (transform.forward * Range) + (transform.right * Angle),
-		});
-		_lineRenderer.loop = true;
 
 		if (GameManager.Instance.SelectedDefender != null)
 		{

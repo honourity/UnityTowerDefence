@@ -5,9 +5,8 @@ using UnityEngine;
 
 public class Defender : MonoBehaviour {
 
-	public float AttackRange = 5f;
-	public float AttackCooldown = 2f;
 	public int AttackDamage = 1;
+	public float AttackCooldown = 2f;
 
 	public bool Selected { get; set; }
 	public Emplacement CurrentEmplacement
@@ -24,27 +23,19 @@ public class Defender : MonoBehaviour {
 		}
 	}
 
-	private List<Enemy> _enemiesInRange;
-	private SphereCollider _attackRangeCollider;
 	private LineRenderer _laser;
 	private float _currentAttackCooldown;
 	private Emplacement _currentEmplacement;
+	private List<Outline> outlineRenderers;
 
-	[HideInInspector]
-	public List<Outline> outlineRenderers;
+	private UnitVision _unitVision;
 
 	private void Awake()
 	{
-		_enemiesInRange = new List<Enemy>();
-		_attackRangeCollider = GetComponent<SphereCollider>();
 		_laser = GetComponent<LineRenderer>();
+		_unitVision = GetComponent<UnitVision>();
 
 		SetupOutlineRenderers();
-	}
-
-	private void Start()
-	{
-		_attackRangeCollider.radius = AttackRange;
 	}
 
 	private void Update()
@@ -61,60 +52,54 @@ public class Defender : MonoBehaviour {
 
 	private void DoAttack()
 	{
-		//todo - redesign this attack method to grab stats from CurrentEmplacement
-		// calculate view angle / firing arc
-		// prioritise enemies within firing arc, closest to objective
-
-
-		Enemy closestEnemy = null;
-		var closestDistance = Mathf.Infinity;
-
-		_enemiesInRange.RemoveAll(e => e == null);
-
-		foreach (var enemyInRange in _enemiesInRange)
+		if (_unitVision.ClosestTarget != null)
 		{
-			if (closestEnemy == null)
-			{
-				closestEnemy = enemyInRange;
-				continue;
-			}
-			else
-			{
-				var distance = Vector3.Distance(gameObject.transform.position, enemyInRange.transform.position);
-				if (distance < closestDistance)
-				{
-					closestDistance = distance;
-					closestEnemy = enemyInRange;
-				}
-			}
-		}
-
-		if (closestEnemy != null)
-		{
-			Debug.DrawLine(gameObject.transform.position, closestEnemy.transform.position, Color.yellow, 0.5f);
-			_laser.SetPositions(new Vector3[2] { gameObject.transform.position, closestEnemy.transform.position });
+			_laser.SetPositions(new Vector3[2] { gameObject.transform.position, _unitVision.ClosestTarget.transform.position });
 			_laser.enabled = true;
 			Invoke("TurnOffLaser", 0.125f);
 			_currentAttackCooldown = AttackCooldown;
 
-			closestEnemy.TakeDamage(AttackDamage);
+			_unitVision.ClosestTarget.GetComponent<Enemy>().TakeDamage(AttackDamage);
 		}
-	}
 
-	private void OnTriggerEnter(Collider other)
-	{
-		if (other.tag == "Enemy")
-		{
-			_enemiesInRange.Add(other.gameObject.GetComponent<Enemy>());
-		}
-	}
+	//	//todo - redesign this attack method to grab stats from CurrentEmplacement
+	//	// calculate view angle / firing arc
+	//	// prioritise enemies within firing arc, closest to objective
 
-	private void OnTriggerExit(Collider other)
-	{
-		if (other.tag == "Enemy")
-		{
-			_enemiesInRange.Remove(other.gameObject.GetComponent<Enemy>());
-		}
+
+	//	Enemy closestEnemy = null;
+	//	var closestDistance = Mathf.Infinity;
+
+	//	_enemiesInRange.RemoveAll(e => e == null);
+
+	//	foreach (var enemyInRange in _enemiesInRange)
+	//	{
+	//		if (closestEnemy == null)
+	//		{
+	//			closestEnemy = enemyInRange;
+	//			continue;
+	//		}
+	//		else
+	//		{
+	//			var distance = Vector3.Distance(gameObject.transform.position, enemyInRange.transform.position);
+	//			if (distance < closestDistance)
+	//			{
+	//				closestDistance = distance;
+	//				closestEnemy = enemyInRange;
+	//			}
+	//		}
+	//	}
+
+	//	if (closestEnemy != null)
+	//	{
+	//		Debug.DrawLine(gameObject.transform.position, closestEnemy.transform.position, Color.yellow, 0.5f);
+	//		_laser.SetPositions(new Vector3[2] { gameObject.transform.position, closestEnemy.transform.position });
+	//		_laser.enabled = true;
+	//		Invoke("TurnOffLaser", 0.125f);
+	//		_currentAttackCooldown = AttackCooldown;
+
+	//		closestEnemy.TakeDamage(AttackDamage);
+	//	}
 	}
 
 	private void TurnOffLaser()
@@ -135,6 +120,8 @@ public class Defender : MonoBehaviour {
 				meshRenderers.AddRange(child.gameObject.GetComponents<MeshRenderer>());
 			}
 		}
+
+		if (outlineRenderers == null) outlineRenderers = new List<Outline>();
 
 		foreach (var meshRenderer in meshRenderers)
 		{

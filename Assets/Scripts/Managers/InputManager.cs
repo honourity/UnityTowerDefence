@@ -36,7 +36,7 @@ public class InputManager : MonoBehaviour
 			RaycastHit hit;
 			if (Physics.Raycast(mouseRay, out hit, Mathf.Infinity, GameManager.Instance.DefendersLayer))
 			{
-				GameManager.Instance.SelectDefender(hit.transform.parent.gameObject.GetComponent<Defender>());
+				GameManager.Instance.SelectDefender(hit.transform.gameObject.GetComponent<Defender>());
 			}
 			else
 			{
