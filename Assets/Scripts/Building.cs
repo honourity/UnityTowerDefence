@@ -4,7 +4,7 @@ public class Building : MonoBehaviour, ITargetable {
 
 	public int Health = 10;
 	public GameObject ShowHideMeshSection;
-	public GameObject DeadBuilding;
+	public GameObject DeadPrefab;
 
 	public bool MouseHovering { get; set; }
 
@@ -19,9 +19,7 @@ public class Building : MonoBehaviour, ITargetable {
 
 		if (Health <= 0)
 		{
-			//todo - dont just destroy, kick off spawning of a "destroyed" building
-			// maybe also play a transition animation
-			// maybe also displace all defenders who are assigned to emplacements which are children of this building
+			if (DeadPrefab != null) Instantiate(DeadPrefab, transform.position, transform.rotation);
 			Destroy(gameObject);
 			return true;
 		}
@@ -33,7 +31,6 @@ public class Building : MonoBehaviour, ITargetable {
 	{
 		GameManager.Instance.BuildingsDestroyed++;
 		GameManager.Instance.BuildingsRemaining--;
-		Instantiate(DeadBuilding, transform.position, transform.rotation);
 	}
 
 	private void Update()

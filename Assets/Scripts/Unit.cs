@@ -7,6 +7,7 @@ public class Unit : MonoBehaviour, ITargetable
 	public int Health = 10;
 	public int AttackDamage = 1;
 	public float AttackCooldown = 2.0f;
+	public GameObject DeadPrefab;
 
 	public NavMeshAgent NavMeshAgent { get; protected set; }
 	public UnitVision Vision { get; protected set; }
@@ -21,6 +22,7 @@ public class Unit : MonoBehaviour, ITargetable
 
 		if (Health <= 0)
 		{
+			if (DeadPrefab != null) Instantiate(DeadPrefab, transform.position, transform.rotation);
 			Destroy(gameObject);
 			return true;
 		}

@@ -37,8 +37,6 @@ public class UnitHearing : MonoBehaviour
 		{
 			if (target != null)
 			{
-				var distanceToTarget = Vector3.Distance(transform.position, target.transform.position);
-
 				InRangeTargets.Add(target.gameObject);
 
 				if (ClosestInRangeTarget == null)

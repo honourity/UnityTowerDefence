@@ -2381,8 +2381,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Health: 10
   ShowHideMeshSection: {fileID: 1919249827072310}
-  DeadBuilding: {fileID: 1440403673405342, guid: 852e02d963b1e714ab2e038e3676cda2,
-    type: 2}
+  DeadPrefab: {fileID: 1440403673405342, guid: 852e02d963b1e714ab2e038e3676cda2, type: 2}
 --- !u!114 &114877202090688076
 MonoBehaviour:
   m_ObjectHideFlags: 1
