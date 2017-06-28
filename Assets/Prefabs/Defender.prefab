@@ -11,23 +11,6 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1800666341468914}
   m_IsPrefabParent: 1
---- !u!1 &1343969881178098
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 4764080146892782}
-  - component: {fileID: 23318643240636148}
-  - component: {fileID: 33845174232194236}
-  m_Layer: 0
-  m_Name: VisionDisplay
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &1800666341468914
 GameObject:
   m_ObjectHideFlags: 0
@@ -50,19 +33,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4764080146892782
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1343969881178098}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4841783620295790}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4841783620295790
 Transform:
   m_ObjectHideFlags: 1
@@ -70,45 +40,12 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1800666341468914}
   m_LocalRotation: {x: -0, y: -0.98437035, z: -0, w: 0.17611101}
-  m_LocalPosition: {x: 11.844, y: 0.5, z: 4.455}
+  m_LocalPosition: {x: 6.8560214, y: 0.5, z: 1.6162572}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 4764080146892782}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -159.71301, z: 0}
---- !u!23 &23318643240636148
-MeshRenderer:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1343969881178098}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_Materials:
-  - {fileID: 2100000, guid: af265d0e3f054c34bb44070f493fc88d, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
 --- !u!23 &23954786516331560
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -141,13 +78,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!33 &33845174232194236
-MeshFilter:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1343969881178098}
-  m_Mesh: {fileID: 0}
 --- !u!33 &33957293113745898
 MeshFilter:
   m_ObjectHideFlags: 1
@@ -191,19 +121,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75012831a204ca34a9b857368ed592ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Range: 10
+  Range: 3
   Angle: 90
+  PositionOffset: {x: 0, y: 0, z: 0}
   TargetsMask:
     serializedVersion: 2
     m_Bits: 4096
   ObstaclesMask:
     serializedVersion: 2
     m_Bits: 512
-  VisionMeshResolution: 4
-  VisionMeshFilter: {fileID: 33845174232194236}
-  EdgeResolveIterations: 6
-  EdgeDistanceThreshold: 1
-  VisibleTargets: []
+  VisionMeshResolution: 8
+  EdgeResolveIterations: 8
+  EdgeDistanceThreshold: 0.5
+  UnitVisionDisplay: {fileID: 1166181077163494, guid: 32e901b706386ae4fb451fee0fb18690,
+    type: 2}
+  VisibleTargets:
+  - {fileID: 0}
   ClosestTarget: {fileID: 0}
 --- !u!120 &120050447572173922
 LineRenderer:
@@ -238,8 +171,8 @@ LineRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Positions:
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
+  - {x: 8.11, y: 0.5, z: 1.31}
+  - {x: 9.12, y: 0.45499998, z: -1.15}
   m_Parameters:
     serializedVersion: 2
     widthMultiplier: 0.1

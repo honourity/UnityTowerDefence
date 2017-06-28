@@ -2,18 +2,11 @@
 
 public class Emplacement : MonoBehaviour {
 
-	public float Angle;
-	public float Range;
-
+	public GameObject HighlightedDisplay;
+	public UnitVision Vision;
 	public Defender Occupant { get; set; }
+
 	public bool MouseHovering { get; set; }
-
-	private GameObject _highlightIndicator;
-
-	private void Awake()
-	{
-		_highlightIndicator = transform.Find("HighlightIndividual").gameObject;
-	}
 
 	private void Update()
 	{
@@ -30,11 +23,11 @@ public class Emplacement : MonoBehaviour {
 	{
 		if (MouseHovering)
 		{
-			_highlightIndicator.SetActive(true);
+			HighlightedDisplay.SetActive(true);
 		}
 		else
 		{
-			_highlightIndicator.SetActive(false);
+			HighlightedDisplay.SetActive(false);
 		}
 
 		MouseHovering = false;

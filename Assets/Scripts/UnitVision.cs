@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class UnitVision : MonoBehaviour
@@ -9,22 +8,24 @@ public class UnitVision : MonoBehaviour
 	public float Range = 5f;
 	[Range(0, 360)]
 	public float Angle = 90f;
-
+	public Vector3 PositionOffset = new Vector3();
 	public LayerMask TargetsMask;
 	public LayerMask ObstaclesMask;
 
 	[Header("Display Settings")]
 	public int VisionMeshResolution = 1;
-	public MeshFilter VisionMeshFilter;
-	private Mesh VisionMesh;
 	public int EdgeResolveIterations = 2;
 	public float EdgeDistanceThreshold = 0.5f;
+	public GameObject UnitVisionDisplay;
 
 	[HideInInspector]
 	public List<Transform> VisibleTargets = new List<Transform>();
-
 	[HideInInspector]
 	public Transform ClosestTarget;
+
+	private GameObject _unitVisionDisplayInstance;
+	private Mesh _visionMesh;
+	private MeshFilter _visionMeshFilter;
 
 	public Vector3 DirectionFromAngle(float angle, bool globalAngle)
 	{
@@ -32,13 +33,21 @@ public class UnitVision : MonoBehaviour
 		return new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad), 0, Mathf.Cos(angle * Mathf.Deg2Rad));
 	}
 
+	private void Awake()
+	{
+		_unitVisionDisplayInstance = Instantiate(UnitVisionDisplay, transform);
+		_unitVisionDisplayInstance.transform.localPosition = PositionOffset;
+		_visionMesh = _unitVisionDisplayInstance.GetComponent<Mesh>();
+		_visionMeshFilter = _unitVisionDisplayInstance.GetComponent<MeshFilter>();
+	}
+
 	private void Start()
 	{
-		VisionMesh = new Mesh()
+		_visionMesh = new Mesh()
 		{
 			name = "Vision Mesh"
 		};
-		VisionMeshFilter.mesh = VisionMesh;
+		_visionMeshFilter.mesh = _visionMesh;
 
 		StartCoroutine(FindTargetsWithDelay(0.2f));
 	}
@@ -62,15 +71,15 @@ public class UnitVision : MonoBehaviour
 		VisibleTargets.Clear();
 		ClosestTarget = null;
 
-		var targetsInRange = Physics.OverlapSphere(transform.position, Range, TargetsMask);
+		var targetsInRange = Physics.OverlapSphere(_unitVisionDisplayInstance.transform.position, Range, TargetsMask);
 
 		foreach (var target in targetsInRange)
 		{
-			var directionToTarget = (target.transform.position - transform.position).normalized;
-			if (Vector3.Angle(transform.forward, directionToTarget) < (Angle / 2))
+			var directionToTarget = (target.transform.position - _unitVisionDisplayInstance.transform.position).normalized;
+			if (Vector3.Angle(_unitVisionDisplayInstance.transform.forward, directionToTarget) < (Angle / 2))
 			{
-				var distanceToTarget = Vector3.Distance(transform.position, target.transform.position);
-				if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, ObstaclesMask))
+				var distanceToTarget = Vector3.Distance(_unitVisionDisplayInstance.transform.position, target.transform.position);
+				if (!Physics.Raycast(_unitVisionDisplayInstance.transform.position, directionToTarget, distanceToTarget, ObstaclesMask))
 				{
 					VisibleTargets.Add(target.transform);
 
@@ -78,7 +87,7 @@ public class UnitVision : MonoBehaviour
 					{
 						ClosestTarget = target.transform;
 					}
-					else if (Vector3.Distance(transform.position, target.transform.position) < Vector3.Distance(transform.position, ClosestTarget.position))
+					else if (Vector3.Distance(_unitVisionDisplayInstance.transform.position, target.transform.position) < Vector3.Distance(_unitVisionDisplayInstance.transform.position, ClosestTarget.position))
 					{
 						ClosestTarget = target.transform;
 					}
@@ -97,7 +106,7 @@ public class UnitVision : MonoBehaviour
 
 		for (int i = 0; i <= stepCount; i++)
 		{
-			var angle = transform.eulerAngles.y - Angle / 2 + stepAngleSize * i;
+			var angle = _unitVisionDisplayInstance.transform.eulerAngles.y - Angle / 2 + stepAngleSize * i;
 			var newVisionCast = VisionCast(angle);
 
 			if (i > 0)
@@ -109,12 +118,12 @@ public class UnitVision : MonoBehaviour
 				{
 					var edge = FindEdge(oldVisionCast, newVisionCast);
 
-					if (edge.PointA != Vector3.zero) vertices.Add(transform.InverseTransformPoint(edge.PointA));
-					if (edge.PointB != Vector3.zero) vertices.Add(transform.InverseTransformPoint(edge.PointB));
+					if (edge.PointA != Vector3.zero) vertices.Add(_unitVisionDisplayInstance.transform.InverseTransformPoint(edge.PointA));
+					if (edge.PointB != Vector3.zero) vertices.Add(_unitVisionDisplayInstance.transform.InverseTransformPoint(edge.PointB));
 				}
 			}
-
-			vertices.Add(transform.InverseTransformPoint(newVisionCast.Point));
+				
+			vertices.Add(_unitVisionDisplayInstance.transform.InverseTransformPoint(newVisionCast.Point));
 			oldVisionCast = newVisionCast;
 		}
 
@@ -129,10 +138,10 @@ public class UnitVision : MonoBehaviour
 			triangles[i * 3 + 2] = i + 2;
 		}
 
-		VisionMesh.Clear();
-		VisionMesh.vertices = vertices.ToArray();
-		VisionMesh.triangles = triangles;
-		VisionMesh.RecalculateNormals();
+		_visionMesh.Clear();
+		_visionMesh.vertices = vertices.ToArray();
+		_visionMesh.triangles = triangles;
+		_visionMesh.RecalculateNormals();
 	}
 
 	private EdgeInfo FindEdge(VisionCastInfo minVisionCast, VisionCastInfo maxVisionCast)
@@ -168,13 +177,13 @@ public class UnitVision : MonoBehaviour
 		var direction = DirectionFromAngle(globalAngle, true);
 		RaycastHit hit;
 
-		if (Physics.Raycast(transform.position, direction, out hit, Range, ObstaclesMask))
+		if (Physics.Raycast(_unitVisionDisplayInstance.transform.position, direction, out hit, Range, ObstaclesMask))
 		{
 			return new VisionCastInfo(true, hit.point, hit.distance, globalAngle);
 		}
 		else
 		{
-			return new VisionCastInfo(false, transform.position + direction * Range, Range, globalAngle);
+			return new VisionCastInfo(false, _unitVisionDisplayInstance.transform.position + (direction*Range), Range, globalAngle);
 		}
 	}
 
