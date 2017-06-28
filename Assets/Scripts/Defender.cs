@@ -4,12 +4,9 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(UnitVision))]
-public class Defender : MonoBehaviour {
-
-	public int AttackDamage = 1;
-	public float AttackCooldown = 2f;
-
+[RequireComponent(typeof(UnitVision<Enemy>))]
+public class Defender : Unit<Enemy>
+{
 	public bool Selected { get; set; }
 	public bool MouseHovering { get; set; }
 	public Emplacement CurrentEmplacement
@@ -25,26 +22,29 @@ public class Defender : MonoBehaviour {
 			if (_currentEmplacement != null) _currentEmplacement.Occupant = this;
 		}
 	}
-	public NavMeshAgent NavMeshAgent { get; private set; }
-	public UnitVision Vision { get; private set; }
 
-	private LineRenderer _laser;
-	private float _currentAttackCooldown;
 	private Emplacement _currentEmplacement;
 	private List<Outline> outlineRenderers;
 
-	private void Awake()
+	protected override void Awake()
 	{
-		NavMeshAgent = GetComponent<NavMeshAgent>();
-		Vision = GetComponent<UnitVision>();
+		base.Awake();
 
 		_laser = GetComponent<LineRenderer>();
 
 		SetupOutlineRenderers();
 	}
 
-	private void Update()
+	protected override void Start()
 	{
+		base.Start();
+	}
+
+	protected override void Update()
+	{
+		base.Update();
+
+		//rendering field of vision display
 		if (MouseHovering && CurrentEmplacement == null)
 		{
 			Vision.Display = true;
@@ -55,6 +55,7 @@ public class Defender : MonoBehaviour {
 		}
 		MouseHovering = false;
 
+		//rendering unit selection highlight
 		if (Selected)
 		{
 			outlineRenderers.ForEach(renderer => renderer.enabled = true);
@@ -63,36 +64,17 @@ public class Defender : MonoBehaviour {
 		{
 			outlineRenderers.ForEach(renderer => renderer.enabled = false);
 		}
-
-		_currentAttackCooldown = Mathf.MoveTowards(_currentAttackCooldown, 0, Time.deltaTime);
-		if (_currentAttackCooldown < 0.01)
-		{
-			DoAttack();
-		}
 	}
 
-	private void DoAttack()
+	protected override void Attack()
 	{
-		var currentVision = Vision;
+		_currentlyActiveVision = Vision;
 		if (CurrentEmplacement != null && Vector3.Distance(transform.position, CurrentEmplacement.transform.position) < NavMeshAgent.stoppingDistance)
 		{
-			currentVision = CurrentEmplacement.Vision;
+			_currentlyActiveVision = CurrentEmplacement.Vision;
 		}
 
-		if (currentVision.ClosestTarget != null)
-		{
-			_laser.SetPositions(new Vector3[2] { gameObject.transform.position, currentVision.ClosestTarget.transform.position });
-			_laser.enabled = true;
-			Invoke("TurnOffLaser", 0.125f);
-			_currentAttackCooldown = AttackCooldown;
-
-			currentVision.ClosestTarget.GetComponent<Enemy>().TakeDamage(AttackDamage);
-		}
-	}
-
-	private void TurnOffLaser()
-	{
-		_laser.enabled = false;
+		base.Attack();
 	}
 
 	private void SetupOutlineRenderers()

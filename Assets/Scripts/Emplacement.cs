@@ -1,17 +1,17 @@
 ﻿using UnityEngine;
 
-[RequireComponent(typeof(UnitVision))]
+[RequireComponent(typeof(UnitVision<Enemy>))]
 public class Emplacement : MonoBehaviour {
 
 	public GameObject HighlightedDisplay;
-	public UnitVision Vision { get; private set; }
+	public UnitVision<Enemy> Vision { get; private set; }
 	public Defender Occupant { get; set; }
 
 	public bool MouseHovering { get; set; }
 
 	private void Start()
 	{
-		Vision = GetComponent<UnitVision>();
+		Vision = GetComponent<UnitVision<Enemy>>();
 	}
 
 	private void Update()

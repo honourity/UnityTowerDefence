@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [DisallowMultipleComponent]
-public class GameManager : MonoBehaviour {
+public class GameManager : MonoBehaviour
+{
 	public static GameManager Instance
 	{
 		get { return _instance = _instance ?? FindObjectOfType<GameManager>() ?? new GameManager { }; }

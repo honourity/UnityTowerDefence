@@ -1,8 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class UnitVision : MonoBehaviour
+/// <summary>
+/// 
+/// </summary>
+/// <typeparam name="T">Target type, must have base type Unit</typeparam>
+public class UnitVision<T> : MonoBehaviour where T : MonoBehaviour, ITargetable 
 {
 	[Header("Functional Settings")]
 	public float Range = 5f;
@@ -19,9 +22,9 @@ public class UnitVision : MonoBehaviour
 	public GameObject UnitVisionDisplay;
 	
 	[HideInInspector]
-	public List<Transform> VisibleTargets = new List<Transform>();
+	public List<T> VisibleTargets = new List<T>();
 	[HideInInspector]
-	public Transform ClosestTarget;
+	public T ClosestTarget;
 	[HideInInspector]
 	public bool Display;
 
@@ -79,7 +82,7 @@ public class UnitVision : MonoBehaviour
 	private void FindVisibleTargets()
 	{
 		VisibleTargets.Clear();
-		ClosestTarget = null;
+		ClosestTarget = default(T);
 
 		var targetsInRange = Physics.OverlapSphere(_unitVisionDisplayInstance.transform.position, Range, TargetsMask);
 
@@ -91,15 +94,15 @@ public class UnitVision : MonoBehaviour
 				var distanceToTarget = Vector3.Distance(_unitVisionDisplayInstance.transform.position, target.transform.position);
 				if (!Physics.Raycast(_unitVisionDisplayInstance.transform.position, directionToTarget, distanceToTarget, ObstaclesMask))
 				{
-					VisibleTargets.Add(target.transform);
+					VisibleTargets.Add(target.transform.GetComponent<T>());
 
 					if (ClosestTarget == null)
 					{
-						ClosestTarget = target.transform;
+						ClosestTarget = target.transform.GetComponent<T>();
 					}
-					else if (Vector3.Distance(_unitVisionDisplayInstance.transform.position, target.transform.position) < Vector3.Distance(_unitVisionDisplayInstance.transform.position, ClosestTarget.position))
+					else if (Vector3.Distance(_unitVisionDisplayInstance.transform.position, target.transform.position) < Vector3.Distance(_unitVisionDisplayInstance.transform.position, ClosestTarget.transform.position))
 					{
-						ClosestTarget = target.transform;
+						ClosestTarget = target.transform.GetComponent<T>();
 					}
 				}
 			}
