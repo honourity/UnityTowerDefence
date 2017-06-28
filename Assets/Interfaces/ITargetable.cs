@@ -2,7 +2,7 @@
 
 public interface ITargetable
 {
-	void TakeDamage(int damage);
+	bool TakeDamage(int damage);
 
-	Transform transform { get; }
+	GameObject gameObject { get; }
 }

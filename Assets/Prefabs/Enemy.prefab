@@ -41,7 +41,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1875996128923078}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 9.12, y: 0.5, z: -1.15}
+  m_LocalPosition: {x: 7.33, y: 0.5, z: -1.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -124,9 +124,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c3edb1015b91844c9d13f7625897966, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Health: 5
+  Health: 3
   AttackDamage: 1
-  AttackCooldown: 2
+  AttackCooldown: 0.2
 --- !u!114 &114755889898633550
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -138,7 +138,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75012831a204ca34a9b857368ed592ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Range: 5
+  Range: 2
   Angle: 360
   PositionOffset: {x: 0, y: 0, z: 0}
   TargetsMask:
@@ -146,14 +146,12 @@ MonoBehaviour:
     m_Bits: 1280
   ObstaclesMask:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 0
   VisionMeshResolution: 8
   EdgeResolveIterations: 8
   EdgeDistanceThreshold: 0.5
   UnitVisionDisplay: {fileID: 1166181077163494, guid: 32e901b706386ae4fb451fee0fb18690,
     type: 2}
-  VisibleTargets: []
-  ClosestTarget: {fileID: 0}
   Display: 0
 --- !u!120 &120984854174840852
 LineRenderer:

@@ -19,9 +19,9 @@ public class UnitVision : MonoBehaviour
 	public GameObject UnitVisionDisplay;
 	
 	[HideInInspector]
-	public List<Unit> VisibleTargets = new List<Unit>();
+	public List<ITargetable> VisibleTargets = new List<ITargetable>();
 	[HideInInspector]
-	public Unit ClosestTarget;
+	public ITargetable ClosestTarget;
 	[HideInInspector]
 	public bool Display;
 
@@ -79,32 +79,34 @@ public class UnitVision : MonoBehaviour
 	private void FindVisibleTargets()
 	{
 		VisibleTargets.Clear();
-		ClosestTarget = default(Unit);
+		ClosestTarget = null;
 
 		var targetsInRange = Physics.OverlapSphere(_unitVisionDisplayInstance.transform.position, Range, TargetsMask);
 
 		foreach (var target in targetsInRange)
 		{
-			var directionToTarget = (target.transform.position - _unitVisionDisplayInstance.transform.position).normalized;
-			if (Vector3.Angle(_unitVisionDisplayInstance.transform.forward, directionToTarget) < (Angle / 2))
+			if (target != null)
 			{
-				var distanceToTarget = Vector3.Distance(_unitVisionDisplayInstance.transform.position, target.transform.position);
-				if (!Physics.Raycast(_unitVisionDisplayInstance.transform.position, directionToTarget, distanceToTarget, ObstaclesMask))
+				var directionToTarget = (target.transform.position - _unitVisionDisplayInstance.transform.position).normalized;
+				if (Vector3.Angle(_unitVisionDisplayInstance.transform.forward, directionToTarget) < (Angle / 2))
 				{
-					VisibleTargets.Add(target.transform.GetComponent<Unit>());
+					var distanceToTarget = Vector3.Distance(_unitVisionDisplayInstance.transform.position, target.transform.position);
+					if (!Physics.Raycast(_unitVisionDisplayInstance.transform.position, directionToTarget, distanceToTarget, ObstaclesMask))
+					{
+						VisibleTargets.Add(target.transform.GetComponent<ITargetable>());
 
-					if (ClosestTarget == default(Unit))
-					{
-						ClosestTarget = target.transform.GetComponent<Unit>();
-					}
-					else if (Vector3.Distance(_unitVisionDisplayInstance.transform.position, target.transform.position) < Vector3.Distance(_unitVisionDisplayInstance.transform.position, ClosestTarget.transform.position))
-					{
-						ClosestTarget = target.transform.GetComponent<Unit>();
+						if (ClosestTarget == null)
+						{
+							ClosestTarget = target.transform.GetComponent<ITargetable>();
+						}
+						else if (Vector3.Distance(_unitVisionDisplayInstance.transform.position, target.transform.position) < Vector3.Distance(_unitVisionDisplayInstance.transform.position, ClosestTarget.gameObject.transform.position))
+						{
+							ClosestTarget = target.transform.GetComponent<ITargetable>();
+						}
 					}
 				}
 			}
 		}
-
 	}
 
 	private void DrawVision()

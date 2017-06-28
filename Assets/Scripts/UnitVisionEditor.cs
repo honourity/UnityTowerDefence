@@ -14,11 +14,11 @@ public class UnitVisionEditor : Editor {
 
 		if (vision.VisibleTargets != null)
 		{
-			foreach (var target in vision.VisibleTargets)
+			foreach (var visionTarget in vision.VisibleTargets)
 			{
-				if (target != null)
+				if (visionTarget != null)
 				{
-					Handles.DrawLine(vision.transform.position, target.transform.position);
+					Handles.DrawLine(vision.transform.position, visionTarget.gameObject.transform.position);
 				}
 			}
 		}

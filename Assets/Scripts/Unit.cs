@@ -15,26 +15,33 @@ public class Unit : MonoBehaviour, ITargetable
 	protected UnitVision _currentlyActiveVision;
 	protected LineRenderer _laser;
 
-	public void TakeDamage(int damage)
+	public bool TakeDamage(int damage)
 	{
 		Health -= damage;
 
 		if (Health <= 0)
 		{
 			Destroy(gameObject);
+			return true;
 		}
+
+		return false;
 	}
 
 	protected virtual void Attack()
 	{
-		if (_currentlyActiveVision.ClosestTarget != null)
+		if (_currentlyActiveVision.ClosestTarget != null && _currentlyActiveVision.ClosestTarget.gameObject != null)
 		{
-			_laser.SetPositions(new Vector3[2] { gameObject.transform.position, _currentlyActiveVision.ClosestTarget.transform.position });
+			_laser.SetPositions(new Vector3[2] { gameObject.transform.position, _currentlyActiveVision.ClosestTarget.gameObject.transform.position });
 			_laser.enabled = true;
 			Invoke("TurnOffLaser", 0.125f);
 			_currentAttackCooldown = AttackCooldown;
 
-			_currentlyActiveVision.ClosestTarget.GetComponent<Unit>().TakeDamage(AttackDamage);
+			if (_currentlyActiveVision.ClosestTarget.TakeDamage(AttackDamage))
+			{
+				_currentlyActiveVision.VisibleTargets.Clear();
+				_currentlyActiveVision.ClosestTarget = null;
+			}
 		}
 	}
 

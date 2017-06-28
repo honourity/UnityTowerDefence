@@ -2,13 +2,13 @@
 
 public class Enemy : Unit
 {
-	private Transform _target;
+	private Transform _navigationObjective;
 
 	protected override void Awake()
 	{
 		base.Awake();
 
-		_target = GameObject.FindWithTag("EnemyObjective").transform;
+		_navigationObjective = GameObject.FindWithTag("EnemyObjective").transform;
 	}
 
 	private void OnDestroy()

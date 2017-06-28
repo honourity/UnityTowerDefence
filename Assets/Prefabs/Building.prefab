@@ -2267,8 +2267,6 @@ MonoBehaviour:
   EdgeDistanceThreshold: 0.5
   UnitVisionDisplay: {fileID: 1166181077163494, guid: 32e901b706386ae4fb451fee0fb18690,
     type: 2}
-  VisibleTargets: []
-  ClosestTarget: {fileID: 0}
   Display: 0
 --- !u!114 &114226883933249386
 MonoBehaviour:
@@ -2307,8 +2305,6 @@ MonoBehaviour:
   EdgeDistanceThreshold: 0.5
   UnitVisionDisplay: {fileID: 1166181077163494, guid: 32e901b706386ae4fb451fee0fb18690,
     type: 2}
-  VisibleTargets: []
-  ClosestTarget: {fileID: 0}
   Display: 0
 --- !u!114 &114553544464175872
 MonoBehaviour:
@@ -2335,8 +2331,6 @@ MonoBehaviour:
   EdgeDistanceThreshold: 0.5
   UnitVisionDisplay: {fileID: 1166181077163494, guid: 32e901b706386ae4fb451fee0fb18690,
     type: 2}
-  VisibleTargets: []
-  ClosestTarget: {fileID: 0}
   Display: 0
 --- !u!114 &114729650387168444
 MonoBehaviour:
@@ -2363,8 +2357,6 @@ MonoBehaviour:
   EdgeDistanceThreshold: 0.5
   UnitVisionDisplay: {fileID: 1166181077163494, guid: 32e901b706386ae4fb451fee0fb18690,
     type: 2}
-  VisibleTargets: []
-  ClosestTarget: {fileID: 0}
   Display: 0
 --- !u!114 &114803716275699464
 MonoBehaviour:

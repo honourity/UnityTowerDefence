@@ -81,7 +81,7 @@ public class Defender : Unit
 
 	private void SetupOutlineRenderers()
 	{
-		List<MeshRenderer> meshRenderers = gameObject.GetComponents<MeshRenderer>().ToList();
+		var meshRenderer = gameObject.GetComponent<MeshRenderer>();
 
 		////disabled including children in outliner, until we have some proper art assets
 		//int count = gameObject.transform.childCount;
@@ -96,10 +96,10 @@ public class Defender : Unit
 
 		if (outlineRenderers == null) outlineRenderers = new List<Outline>();
 
-		foreach (var meshRenderer in meshRenderers)
-		{
+		//foreach (var meshRenderer in meshRenderers)
+		//{
 			var outlineRenderer = meshRenderer.gameObject.AddComponent<Outline>();
 			outlineRenderers.Add(outlineRenderer);
-		}
+		//}
 	}
 }

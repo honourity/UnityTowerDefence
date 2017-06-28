@@ -12,7 +12,7 @@ public class Building : MonoBehaviour, ITargetable {
 		GameManager.Instance.BuildingsRemaining++;
 	}
 
-	public void TakeDamage(int damage)
+	public bool TakeDamage(int damage)
 	{
 		Health -= damage;
 
@@ -22,7 +22,10 @@ public class Building : MonoBehaviour, ITargetable {
 			// maybe also play a transition animation
 			// maybe also displace all defenders who are assigned to emplacements which are children of this building
 			Destroy(gameObject);
+			return true;
 		}
+
+		return false;
 	}
 
 	private void OnDestroy()

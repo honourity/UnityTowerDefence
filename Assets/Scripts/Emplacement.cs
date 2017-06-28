@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 
 [RequireComponent(typeof(UnitVision))]
-public class Emplacement : MonoBehaviour {
-
+public class Emplacement : MonoBehaviour
+{
+	public float DestructionDisplacement = 3f;
 	public GameObject HighlightedDisplay;
 	public UnitVision Vision { get; private set; }
 	public Defender Occupant { get; set; }
@@ -19,10 +20,19 @@ public class Emplacement : MonoBehaviour {
 		if (Occupant != null && Vector3.Distance(Occupant.transform.position, transform.position) < 1f)
 		{
 			Occupant.NavMeshAgent.ResetPath();
-			Occupant.transform.SetPositionAndRotation(transform.position + new Vector3(0f,0.5f,0f), transform.rotation);
+			Occupant.transform.SetPositionAndRotation(transform.position + new Vector3(0, 0.5f, 0), transform.rotation);
 		}
 
 		ProcessHighlighting();
+	}
+
+	private void OnDestroy()
+	{
+		if (Occupant != null)
+		{
+			Occupant.transform.position += transform.forward * DestructionDisplacement;
+			Occupant.CurrentEmplacement = null;
+		}
 	}
 
 	private void ProcessHighlighting()
