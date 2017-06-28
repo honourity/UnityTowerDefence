@@ -7,6 +7,17 @@ public class Building : MonoBehaviour {
 
 	public bool MouseHovering { get; set; }
 
+	private void Start()
+	{
+		GameManager.Instance.BuildingsRemaining++;
+	}
+
+	private void OnDestroy()
+	{
+		GameManager.Instance.BuildingsDestroyed++;
+		GameManager.Instance.BuildingsRemaining--;
+	}
+
 	private void Update()
 	{
 		if (MouseHovering)

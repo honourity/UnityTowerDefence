@@ -1,12 +1,18 @@
 ﻿using UnityEngine;
 
+[RequireComponent(typeof(UnitVision))]
 public class Emplacement : MonoBehaviour {
 
 	public GameObject HighlightedDisplay;
-	public UnitVision Vision;
+	public UnitVision Vision { get; private set; }
 	public Defender Occupant { get; set; }
 
 	public bool MouseHovering { get; set; }
+
+	private void Start()
+	{
+		Vision = GetComponent<UnitVision>();
+	}
 
 	private void Update()
 	{
@@ -24,10 +30,12 @@ public class Emplacement : MonoBehaviour {
 		if (MouseHovering)
 		{
 			HighlightedDisplay.SetActive(true);
+			Vision.Display = true;
 		}
 		else
 		{
 			HighlightedDisplay.SetActive(false);
+			Vision.Display = false;
 		}
 
 		MouseHovering = false;

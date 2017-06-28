@@ -24,7 +24,6 @@ public class GameManager : MonoBehaviour {
 	public Transform EnemySpawn;
 	public Enemy EnemyPrefab;
 	public Defender DefenderPrefab;
-	public Building[] Buildings;
 	public LayerMask DefendersLayer;
 	public LayerMask EnvironmentLayer;
 	public LayerMask BuildingsLayer;
@@ -70,7 +69,6 @@ public class GameManager : MonoBehaviour {
 
 	private void Start()
 	{
-		BuildingsRemaining = Buildings.Length;
 		ObjectiveLivesRemaining = ObjectiveLives;
 		TimeUntilNextWave = 3f;
 

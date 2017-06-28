@@ -25,6 +25,13 @@ public class InputManager : MonoBehaviour
 			GameManager.Instance.HighlightedEmplacement = null;
 		}
 
+		RaycastHit defenderHit;
+		if (Physics.Raycast(mouseRay, out defenderHit, Mathf.Infinity, GameManager.Instance.DefendersLayer))
+		{
+			var defender = defenderHit.transform.gameObject.GetComponent<Defender>();
+			defender.MouseHovering = true;
+		}
+
 		RaycastHit buildingsHit;
 		if (Physics.Raycast(mouseRay, out buildingsHit, Mathf.Infinity, GameManager.Instance.BuildingsLayer))
 		{
@@ -33,10 +40,9 @@ public class InputManager : MonoBehaviour
 
 		if (Input.GetMouseButtonDown(0))
 		{
-			RaycastHit hit;
-			if (Physics.Raycast(mouseRay, out hit, Mathf.Infinity, GameManager.Instance.DefendersLayer))
+			if (defenderHit.transform != null)
 			{
-				GameManager.Instance.SelectDefender(hit.transform.gameObject.GetComponent<Defender>());
+				GameManager.Instance.SelectDefender(defenderHit.transform.gameObject.GetComponent<Defender>());
 			}
 			else
 			{

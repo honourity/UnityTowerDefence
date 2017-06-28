@@ -4,12 +4,14 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
+[RequireComponent(typeof(UnitVision))]
 public class Defender : MonoBehaviour {
 
 	public int AttackDamage = 1;
 	public float AttackCooldown = 2f;
 
 	public bool Selected { get; set; }
+	public bool MouseHovering { get; set; }
 	public Emplacement CurrentEmplacement
 	{
 		get
@@ -24,30 +26,42 @@ public class Defender : MonoBehaviour {
 		}
 	}
 	public NavMeshAgent NavMeshAgent { get; private set; }
+	public UnitVision Vision { get; private set; }
 
 	private LineRenderer _laser;
 	private float _currentAttackCooldown;
 	private Emplacement _currentEmplacement;
 	private List<Outline> outlineRenderers;
 
-	private UnitVision _unitVision;
-
 	private void Awake()
 	{
 		NavMeshAgent = GetComponent<NavMeshAgent>();
+		Vision = GetComponent<UnitVision>();
 
 		_laser = GetComponent<LineRenderer>();
-		_unitVision = GetComponent<UnitVision>();
 
 		//SetupOutlineRenderers();
 	}
 
 	private void Update()
 	{
-		//SetOutlineRenderers();
+		if (MouseHovering && CurrentEmplacement == null)
+		{
+			Vision.Display = true;
+		}
+		else
+		{
+			Vision.Display = false;
+		}
+		MouseHovering = false;
+
+		if (Selected)
+		{
+			//todo - refactor the outline stuff
+			//SetOutlineRenderers();
+		}
 
 		_currentAttackCooldown = Mathf.MoveTowards(_currentAttackCooldown, 0, Time.deltaTime);
-
 		if (_currentAttackCooldown < 0.01)
 		{
 			DoAttack();
@@ -56,54 +70,21 @@ public class Defender : MonoBehaviour {
 
 	private void DoAttack()
 	{
-		if (_unitVision.ClosestTarget != null)
+		var currentVision = Vision;
+		if (CurrentEmplacement != null && Vector3.Distance(transform.position, CurrentEmplacement.transform.position) < NavMeshAgent.stoppingDistance)
 		{
-			_laser.SetPositions(new Vector3[2] { gameObject.transform.position, _unitVision.ClosestTarget.transform.position });
+			currentVision = CurrentEmplacement.Vision;
+		}
+
+		if (currentVision.ClosestTarget != null)
+		{
+			_laser.SetPositions(new Vector3[2] { gameObject.transform.position, currentVision.ClosestTarget.transform.position });
 			_laser.enabled = true;
 			Invoke("TurnOffLaser", 0.125f);
 			_currentAttackCooldown = AttackCooldown;
 
-			_unitVision.ClosestTarget.GetComponent<Enemy>().TakeDamage(AttackDamage);
+			currentVision.ClosestTarget.GetComponent<Enemy>().TakeDamage(AttackDamage);
 		}
-
-	//	//todo - redesign this attack method to grab stats from CurrentEmplacement
-	//	// calculate view angle / firing arc
-	//	// prioritise enemies within firing arc, closest to objective
-
-
-	//	Enemy closestEnemy = null;
-	//	var closestDistance = Mathf.Infinity;
-
-	//	_enemiesInRange.RemoveAll(e => e == null);
-
-	//	foreach (var enemyInRange in _enemiesInRange)
-	//	{
-	//		if (closestEnemy == null)
-	//		{
-	//			closestEnemy = enemyInRange;
-	//			continue;
-	//		}
-	//		else
-	//		{
-	//			var distance = Vector3.Distance(gameObject.transform.position, enemyInRange.transform.position);
-	//			if (distance < closestDistance)
-	//			{
-	//				closestDistance = distance;
-	//				closestEnemy = enemyInRange;
-	//			}
-	//		}
-	//	}
-
-	//	if (closestEnemy != null)
-	//	{
-	//		Debug.DrawLine(gameObject.transform.position, closestEnemy.transform.position, Color.yellow, 0.5f);
-	//		_laser.SetPositions(new Vector3[2] { gameObject.transform.position, closestEnemy.transform.position });
-	//		_laser.enabled = true;
-	//		Invoke("TurnOffLaser", 0.125f);
-	//		_currentAttackCooldown = AttackCooldown;
-
-	//		closestEnemy.TakeDamage(AttackDamage);
-	//	}
 	}
 
 	private void TurnOffLaser()

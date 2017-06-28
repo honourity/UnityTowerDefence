@@ -17,11 +17,13 @@ public class UnitVision : MonoBehaviour
 	public int EdgeResolveIterations = 2;
 	public float EdgeDistanceThreshold = 0.5f;
 	public GameObject UnitVisionDisplay;
-
+	
 	[HideInInspector]
 	public List<Transform> VisibleTargets = new List<Transform>();
 	[HideInInspector]
 	public Transform ClosestTarget;
+	[HideInInspector]
+	public bool Display;
 
 	private GameObject _unitVisionDisplayInstance;
 	private Mesh _visionMesh;
@@ -54,7 +56,15 @@ public class UnitVision : MonoBehaviour
 
 	private void LateUpdate()
 	{
-		DrawVision();
+		if (Display)
+		{
+			DrawVision();
+			_visionMeshFilter.gameObject.SetActive(true);
+		}
+		else
+		{
+			_visionMeshFilter.gameObject.SetActive(false);
+		}
 	}
 
 	private IEnumerator FindTargetsWithDelay(float delay)
