@@ -40,7 +40,7 @@ public class Defender : MonoBehaviour {
 
 		_laser = GetComponent<LineRenderer>();
 
-		//SetupOutlineRenderers();
+		SetupOutlineRenderers();
 	}
 
 	private void Update()
@@ -57,8 +57,11 @@ public class Defender : MonoBehaviour {
 
 		if (Selected)
 		{
-			//todo - refactor the outline stuff
-			//SetOutlineRenderers();
+			outlineRenderers.ForEach(renderer => renderer.enabled = true);
+		}
+		else
+		{
+			outlineRenderers.ForEach(renderer => renderer.enabled = false);
 		}
 
 		_currentAttackCooldown = Mathf.MoveTowards(_currentAttackCooldown, 0, Time.deltaTime);
@@ -96,15 +99,16 @@ public class Defender : MonoBehaviour {
 	{
 		List<MeshRenderer> meshRenderers = gameObject.GetComponents<MeshRenderer>().ToList();
 
-		int count = gameObject.transform.childCount;
-		if (count > 0)
-		{
-			for (int i = 0; i < count; i++)
-			{
-				var child = gameObject.transform.GetChild(i);
-				meshRenderers.AddRange(child.gameObject.GetComponents<MeshRenderer>());
-			}
-		}
+		////disabled including children in outliner, until we have some proper art assets
+		//int count = gameObject.transform.childCount;
+		//if (count > 0)
+		//{
+		//	for (int i = 0; i < count; i++)
+		//	{
+		//		var child = gameObject.transform.GetChild(i);
+		//		meshRenderers.AddRange(child.gameObject.GetComponents<MeshRenderer>());
+		//	}
+		//}
 
 		if (outlineRenderers == null) outlineRenderers = new List<Outline>();
 
@@ -112,18 +116,6 @@ public class Defender : MonoBehaviour {
 		{
 			var outlineRenderer = meshRenderer.gameObject.AddComponent<Outline>();
 			outlineRenderers.Add(outlineRenderer);
-		}
-	}
-
-	private void SetOutlineRenderers()
-	{
-		if (Selected)
-		{
-			outlineRenderers.ForEach(renderer => renderer.enabled = true);
-		}
-		else
-		{
-			outlineRenderers.ForEach(renderer => renderer.enabled = false);
 		}
 	}
 }
