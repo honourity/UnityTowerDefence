@@ -2242,7 +2242,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HighlightedDisplay: {fileID: 1971224881756564}
-  Vision: {fileID: 0}
 --- !u!114 &114105728678738858
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2270,6 +2269,7 @@ MonoBehaviour:
     type: 2}
   VisibleTargets: []
   ClosestTarget: {fileID: 0}
+  Display: 0
 --- !u!114 &114226883933249386
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2282,7 +2282,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HighlightedDisplay: {fileID: 1269047626940056}
-  Vision: {fileID: 0}
 --- !u!114 &114438253713758728
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2310,6 +2309,7 @@ MonoBehaviour:
     type: 2}
   VisibleTargets: []
   ClosestTarget: {fileID: 0}
+  Display: 0
 --- !u!114 &114553544464175872
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2337,6 +2337,7 @@ MonoBehaviour:
     type: 2}
   VisibleTargets: []
   ClosestTarget: {fileID: 0}
+  Display: 0
 --- !u!114 &114729650387168444
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2364,6 +2365,7 @@ MonoBehaviour:
     type: 2}
   VisibleTargets: []
   ClosestTarget: {fileID: 0}
+  Display: 0
 --- !u!114 &114803716275699464
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2375,9 +2377,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4cb3b289a692a84aafa2c185be0f247, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TopSection: {fileID: 1919249827072310}
-  EmplacementPrefab: {fileID: 1265167660185516, guid: 03cbcc95c6d1dd449bb62700b8113382,
-    type: 2}
+  Health: 10
+  ShowHideMeshSection: {fileID: 1919249827072310}
 --- !u!114 &114877202090688076
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2390,7 +2391,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HighlightedDisplay: {fileID: 1268751324217272}
-  Vision: {fileID: 0}
 --- !u!114 &114976556132480330
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2403,7 +2403,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HighlightedDisplay: {fileID: 1298567677048202}
-  Vision: {fileID: 0}
 --- !u!135 &135567249526355724
 SphereCollider:
   m_ObjectHideFlags: 1

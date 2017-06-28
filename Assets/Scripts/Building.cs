@@ -1,15 +1,28 @@
 ﻿using UnityEngine;
 
-public class Building : MonoBehaviour {
+public class Building : MonoBehaviour, ITargetable {
 
-	public GameObject TopSection;
-	public GameObject EmplacementPrefab;
+	public int Health = 10;
+	public GameObject ShowHideMeshSection;
 
 	public bool MouseHovering { get; set; }
 
 	private void Start()
 	{
 		GameManager.Instance.BuildingsRemaining++;
+	}
+
+	public void TakeDamage(int damage)
+	{
+		Health -= damage;
+
+		if (Health <= 0)
+		{
+			//todo - dont just destroy, kick off spawning of a "destroyed" building
+			// maybe also play a transition animation
+			// maybe also displace all defenders who are assigned to emplacements which are children of this building
+			Destroy(gameObject);
+		}
 	}
 
 	private void OnDestroy()
@@ -22,11 +35,11 @@ public class Building : MonoBehaviour {
 	{
 		if (MouseHovering)
 		{
-			TopSection.SetActive(false);
+			ShowHideMeshSection.SetActive(false);
 		}
 		else
 		{
-			TopSection.SetActive(true);
+			ShowHideMeshSection.SetActive(true);
 		}
 
 		MouseHovering = false;

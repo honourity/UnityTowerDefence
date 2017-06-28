@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
-using UnityEngine.AI;
 
-[RequireComponent(typeof(UnitVision<Defender>))]
-public class Enemy : Unit<Defender>
+public class Enemy : Unit
 {
 	private Transform _target;
 
@@ -11,5 +9,10 @@ public class Enemy : Unit<Defender>
 		base.Awake();
 
 		_target = GameObject.FindWithTag("EnemyObjective").transform;
+	}
+
+	private void OnDestroy()
+	{
+		GameManager.Instance.EnemiesKilled++;
 	}
 }

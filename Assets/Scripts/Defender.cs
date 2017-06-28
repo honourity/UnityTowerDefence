@@ -4,8 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(UnitVision<Enemy>))]
-public class Defender : Unit<Enemy>
+public class Defender : Unit
 {
 	public bool Selected { get; set; }
 	public bool MouseHovering { get; set; }
@@ -29,8 +28,6 @@ public class Defender : Unit<Enemy>
 	protected override void Awake()
 	{
 		base.Awake();
-
-		_laser = GetComponent<LineRenderer>();
 
 		SetupOutlineRenderers();
 	}
@@ -64,6 +61,11 @@ public class Defender : Unit<Enemy>
 		{
 			outlineRenderers.ForEach(renderer => renderer.enabled = false);
 		}
+	}
+
+	private void OnDestroy()
+	{
+		GameManager.Instance.DefendersKilled++;
 	}
 
 	protected override void Attack()

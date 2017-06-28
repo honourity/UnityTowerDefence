@@ -1,24 +1,18 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
-using System;
 
-/// <summary>
-/// 
-/// </summary>
-/// <typeparam name="T">the type of target (enemy to this unit)</typeparam>
-public class Unit<T> : MonoBehaviour, ITargetable where T : MonoBehaviour, ITargetable
+[RequireComponent(typeof(UnitVision))]
+public class Unit : MonoBehaviour, ITargetable
 {
 	public int Health = 10;
 	public int AttackDamage = 1;
 	public float AttackCooldown = 2.0f;
 
-	public Enemy TargetType;
-
 	public NavMeshAgent NavMeshAgent { get; protected set; }
-	public UnitVision<T> Vision { get; protected set; }
+	public UnitVision Vision { get; protected set; }
 
 	protected float _currentAttackCooldown;
-	protected UnitVision<T> _currentlyActiveVision;
+	protected UnitVision _currentlyActiveVision;
 	protected LineRenderer _laser;
 
 	public void TakeDamage(int damage)
@@ -27,18 +21,6 @@ public class Unit<T> : MonoBehaviour, ITargetable where T : MonoBehaviour, ITarg
 
 		if (Health <= 0)
 		{
-			switch (gameObject.tag)
-			{
-				case "Enemy":
-					GameManager.Instance.EnemiesKilled++;
-					break;
-				case "Defender":
-					GameManager.Instance.DefendersKilled++;
-					break;
-				default:
-					break;
-			}
-
 			Destroy(gameObject);
 		}
 	}
@@ -52,14 +34,16 @@ public class Unit<T> : MonoBehaviour, ITargetable where T : MonoBehaviour, ITarg
 			Invoke("TurnOffLaser", 0.125f);
 			_currentAttackCooldown = AttackCooldown;
 
-			_currentlyActiveVision.ClosestTarget.GetComponent<T>().TakeDamage(AttackDamage);
+			_currentlyActiveVision.ClosestTarget.GetComponent<Unit>().TakeDamage(AttackDamage);
 		}
 	}
 
 	protected virtual void Awake()
 	{
 		NavMeshAgent = GetComponent<NavMeshAgent>();
-		Vision = GetComponent<UnitVision<T>>();
+		Vision = GetComponent<UnitVision>();
+
+		_laser = GetComponent<LineRenderer>();
 	}
 
 	protected virtual void Start()
