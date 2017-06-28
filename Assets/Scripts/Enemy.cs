@@ -2,11 +2,16 @@
 
 public class Enemy : Unit
 {
+	[HideInInspector]
+	public UnitHearing Hearing { get; protected set; }
+
 	private Transform _navigationObjective;
 
 	protected override void Awake()
 	{
 		base.Awake();
+
+		Hearing = GetComponent<UnitHearing>();
 
 		_navigationObjective = GameObject.FindWithTag("EnemyObjective").transform;
 	}
@@ -14,17 +19,15 @@ public class Enemy : Unit
 	protected override void Start()
 	{
 		base.Start();
-
-		//NavMeshAgent.SetDestination(_navigationObjective.position);
 	}
 
 	protected override void Update()
 	{
 		base.Update();
 
-		if (Vision.ClosestTarget != null)
+		if (Hearing.ClosestInRangeTarget != null)
 		{
-			NavMeshAgent.SetDestination(Vision.ClosestTarget.gameObject.transform.position);
+			NavMeshAgent.SetDestination(Hearing.ClosestInRangeTarget.gameObject.transform.position);
 		}
 		else
 		{

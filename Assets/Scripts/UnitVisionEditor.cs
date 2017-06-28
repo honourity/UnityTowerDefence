@@ -12,9 +12,9 @@ public class UnitVisionEditor : Editor {
 		Handles.DrawDottedLine(vision.transform.position, vision.transform.position + vision.DirectionFromAngle(vision.Angle / 2, false) * vision.Range, 4f);
 		Handles.DrawDottedLine(vision.transform.position, vision.transform.position + vision.DirectionFromAngle(-vision.Angle / 2, false) * vision.Range, 4f);
 
-		if (vision.VisibleTargets != null)
+		if (vision.InRangeTargets != null)
 		{
-			foreach (var visionTarget in vision.VisibleTargets)
+			foreach (var visionTarget in vision.InRangeTargets)
 			{
 				if (visionTarget != null)
 				{

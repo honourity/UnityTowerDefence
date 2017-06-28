@@ -19,9 +19,9 @@ public class UnitVision : MonoBehaviour
 	public GameObject UnitVisionDisplay;
 	
 	[HideInInspector]
-	public List<GameObject> VisibleTargets = new List<GameObject>();
+	public List<GameObject> InRangeTargets = new List<GameObject>();
 	[HideInInspector]
-	public GameObject ClosestTarget;
+	public GameObject ClosestInRangeTarget;
 	[HideInInspector]
 	public bool Display;
 
@@ -72,14 +72,14 @@ public class UnitVision : MonoBehaviour
 		while (true)
 		{
 			yield return new WaitForSeconds(delay);
-			FindVisibleTargets();
+			FindTargets();
 		}
 	}
 
-	private void FindVisibleTargets()
+	private void FindTargets()
 	{
-		VisibleTargets.Clear();
-		ClosestTarget = null;
+		InRangeTargets.Clear();
+		ClosestInRangeTarget = null;
 
 		var targetsInRange = Physics.OverlapSphere(_unitVisionDisplayInstance.transform.position, Range, TargetsMask);
 
@@ -93,15 +93,15 @@ public class UnitVision : MonoBehaviour
 					var distanceToTarget = Vector3.Distance(_unitVisionDisplayInstance.transform.position, target.transform.position);
 					if (!Physics.Raycast(_unitVisionDisplayInstance.transform.position, directionToTarget, distanceToTarget, ObstaclesMask))
 					{
-						VisibleTargets.Add(target.gameObject);
+						InRangeTargets.Add(target.gameObject);
 
-						if (ClosestTarget == null)
+						if (ClosestInRangeTarget == null)
 						{
-							ClosestTarget = target.gameObject;
+							ClosestInRangeTarget = target.gameObject;
 						}
-						else if (Vector3.Distance(_unitVisionDisplayInstance.transform.position, target.transform.position) < Vector3.Distance(_unitVisionDisplayInstance.transform.position, ClosestTarget.transform.position))
+						else if (Vector3.Distance(_unitVisionDisplayInstance.transform.position, target.transform.position) < Vector3.Distance(_unitVisionDisplayInstance.transform.position, ClosestInRangeTarget.transform.position))
 						{
-							ClosestTarget = target.gameObject;
+							ClosestInRangeTarget = target.gameObject;
 						}
 					}
 				}
