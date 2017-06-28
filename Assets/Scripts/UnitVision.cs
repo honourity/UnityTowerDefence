@@ -19,9 +19,9 @@ public class UnitVision : MonoBehaviour
 	public GameObject UnitVisionDisplay;
 	
 	[HideInInspector]
-	public List<ITargetable> VisibleTargets = new List<ITargetable>();
+	public List<GameObject> VisibleTargets = new List<GameObject>();
 	[HideInInspector]
-	public ITargetable ClosestTarget;
+	public GameObject ClosestTarget;
 	[HideInInspector]
 	public bool Display;
 
@@ -93,15 +93,15 @@ public class UnitVision : MonoBehaviour
 					var distanceToTarget = Vector3.Distance(_unitVisionDisplayInstance.transform.position, target.transform.position);
 					if (!Physics.Raycast(_unitVisionDisplayInstance.transform.position, directionToTarget, distanceToTarget, ObstaclesMask))
 					{
-						VisibleTargets.Add(target.transform.GetComponent<ITargetable>());
+						VisibleTargets.Add(target.gameObject);
 
 						if (ClosestTarget == null)
 						{
-							ClosestTarget = target.transform.GetComponent<ITargetable>();
+							ClosestTarget = target.gameObject;
 						}
-						else if (Vector3.Distance(_unitVisionDisplayInstance.transform.position, target.transform.position) < Vector3.Distance(_unitVisionDisplayInstance.transform.position, ClosestTarget.gameObject.transform.position))
+						else if (Vector3.Distance(_unitVisionDisplayInstance.transform.position, target.transform.position) < Vector3.Distance(_unitVisionDisplayInstance.transform.position, ClosestTarget.transform.position))
 						{
-							ClosestTarget = target.transform.GetComponent<ITargetable>();
+							ClosestTarget = target.gameObject;
 						}
 					}
 				}

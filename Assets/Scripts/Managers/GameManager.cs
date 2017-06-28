@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour
 
 	public void SpawnEnemy()
 	{
-		//Instantiate(EnemyPrefab, EnemySpawn.position, EnemySpawn.rotation);
+		Instantiate(EnemyPrefab, EnemySpawn.position, EnemySpawn.rotation);
 	}
 
 	public void SelectDefender(Defender defender)
@@ -121,7 +121,6 @@ public class GameManager : MonoBehaviour
 	public Defender SpawnStrayDefender(Vector3 location)
 	{
 		var defender = Instantiate(DefenderPrefab, new Vector3(location.x, location.y + 0.5f, location.z), Quaternion.identity);
-		//defender.transform.localScale = new Vector3(0.2f, 0.5f, 0.2f);
 		return defender;
 	}
 }

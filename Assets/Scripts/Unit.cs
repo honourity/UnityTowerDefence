@@ -30,14 +30,14 @@ public class Unit : MonoBehaviour, ITargetable
 
 	protected virtual void Attack()
 	{
-		if (_currentlyActiveVision.ClosestTarget != null && _currentlyActiveVision.ClosestTarget.gameObject != null)
+		if (_currentlyActiveVision.ClosestTarget != null)
 		{
 			_laser.SetPositions(new Vector3[2] { gameObject.transform.position, _currentlyActiveVision.ClosestTarget.gameObject.transform.position });
 			_laser.enabled = true;
 			Invoke("TurnOffLaser", 0.125f);
 			_currentAttackCooldown = AttackCooldown;
 
-			if (_currentlyActiveVision.ClosestTarget.TakeDamage(AttackDamage))
+			if (_currentlyActiveVision.ClosestTarget.GetComponent<ITargetable>().TakeDamage(AttackDamage))
 			{
 				_currentlyActiveVision.VisibleTargets.Clear();
 				_currentlyActiveVision.ClosestTarget = null;
