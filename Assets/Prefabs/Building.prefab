@@ -76,8 +76,8 @@ GameObject:
   m_Name: Wall (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!1 &1164609784100134
 GameObject:
@@ -250,8 +250,8 @@ GameObject:
   m_Name: Bit 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!1 &1351854449566050
 GameObject:
@@ -301,8 +301,8 @@ GameObject:
   m_Name: Wall (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!1 &1478820441311942
 GameObject:
@@ -435,8 +435,8 @@ GameObject:
   m_Name: Bit 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!1 &1696967380185912
 GameObject:
@@ -586,8 +586,8 @@ GameObject:
   m_Name: Wall (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!1 &1919249827072310
 GameObject:
@@ -2241,6 +2241,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82a59ec31abf6eb49ae127af27ae45c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DestructionDisplacement: 3
   HighlightedDisplay: {fileID: 1971224881756564}
 --- !u!114 &114105728678738858
 MonoBehaviour:
@@ -2267,6 +2268,8 @@ MonoBehaviour:
   EdgeDistanceThreshold: 0.5
   UnitVisionDisplay: {fileID: 1166181077163494, guid: 32e901b706386ae4fb451fee0fb18690,
     type: 2}
+  InRangeTargets: []
+  ClosestInRangeTarget: {fileID: 0}
   Display: 0
 --- !u!114 &114226883933249386
 MonoBehaviour:
@@ -2279,6 +2282,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82a59ec31abf6eb49ae127af27ae45c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DestructionDisplacement: 3
   HighlightedDisplay: {fileID: 1269047626940056}
 --- !u!114 &114438253713758728
 MonoBehaviour:
@@ -2305,6 +2309,8 @@ MonoBehaviour:
   EdgeDistanceThreshold: 0.5
   UnitVisionDisplay: {fileID: 1166181077163494, guid: 32e901b706386ae4fb451fee0fb18690,
     type: 2}
+  InRangeTargets: []
+  ClosestInRangeTarget: {fileID: 0}
   Display: 0
 --- !u!114 &114553544464175872
 MonoBehaviour:
@@ -2331,6 +2337,8 @@ MonoBehaviour:
   EdgeDistanceThreshold: 0.5
   UnitVisionDisplay: {fileID: 1166181077163494, guid: 32e901b706386ae4fb451fee0fb18690,
     type: 2}
+  InRangeTargets: []
+  ClosestInRangeTarget: {fileID: 0}
   Display: 0
 --- !u!114 &114729650387168444
 MonoBehaviour:
@@ -2357,6 +2365,8 @@ MonoBehaviour:
   EdgeDistanceThreshold: 0.5
   UnitVisionDisplay: {fileID: 1166181077163494, guid: 32e901b706386ae4fb451fee0fb18690,
     type: 2}
+  InRangeTargets: []
+  ClosestInRangeTarget: {fileID: 0}
   Display: 0
 --- !u!114 &114803716275699464
 MonoBehaviour:
@@ -2371,6 +2381,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Health: 10
   ShowHideMeshSection: {fileID: 1919249827072310}
+  DeadBuilding: {fileID: 1440403673405342, guid: 852e02d963b1e714ab2e038e3676cda2,
+    type: 2}
 --- !u!114 &114877202090688076
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2382,6 +2394,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82a59ec31abf6eb49ae127af27ae45c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DestructionDisplacement: 3
   HighlightedDisplay: {fileID: 1268751324217272}
 --- !u!114 &114976556132480330
 MonoBehaviour:
@@ -2394,6 +2407,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82a59ec31abf6eb49ae127af27ae45c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DestructionDisplacement: 3
   HighlightedDisplay: {fileID: 1298567677048202}
 --- !u!135 &135567249526355724
 SphereCollider:

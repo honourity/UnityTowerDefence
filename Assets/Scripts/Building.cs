@@ -4,6 +4,7 @@ public class Building : MonoBehaviour, ITargetable {
 
 	public int Health = 10;
 	public GameObject ShowHideMeshSection;
+	public GameObject DeadBuilding;
 
 	public bool MouseHovering { get; set; }
 
@@ -32,6 +33,7 @@ public class Building : MonoBehaviour, ITargetable {
 	{
 		GameManager.Instance.BuildingsDestroyed++;
 		GameManager.Instance.BuildingsRemaining--;
+		Instantiate(DeadBuilding, transform.position, transform.rotation);
 	}
 
 	private void Update()
