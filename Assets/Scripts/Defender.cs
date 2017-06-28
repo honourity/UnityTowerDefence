@@ -39,12 +39,12 @@ public class Defender : MonoBehaviour {
 		_laser = GetComponent<LineRenderer>();
 		_unitVision = GetComponent<UnitVision>();
 
-		SetupOutlineRenderers();
+		//SetupOutlineRenderers();
 	}
 
 	private void Update()
 	{
-		SetOutlineRenderers();
+		//SetOutlineRenderers();
 
 		_currentAttackCooldown = Mathf.MoveTowards(_currentAttackCooldown, 0, Time.deltaTime);
 

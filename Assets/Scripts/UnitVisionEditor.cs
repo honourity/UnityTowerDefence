@@ -11,8 +11,8 @@ public class UnitVisionEditor : Editor {
 		vision = (UnitVision)target;
 		Handles.color = Color.white;
 		Handles.DrawWireDisc(vision.transform.position, Vector3.up, vision.Range);
-		Handles.DrawDottedLine(vision.transform.position, vision.transform.position + DirectionFromAngle(vision.Angle / 2) * vision.Range, 4f);
-		Handles.DrawDottedLine(vision.transform.position, vision.transform.position + DirectionFromAngle(-vision.Angle / 2) * vision.Range, 4f);
+		Handles.DrawDottedLine(vision.transform.position, vision.transform.position + vision.DirectionFromAngle(vision.Angle / 2, false) * vision.Range, 4f);
+		Handles.DrawDottedLine(vision.transform.position, vision.transform.position + vision.DirectionFromAngle(-vision.Angle / 2, false) * vision.Range, 4f);
 
 		if (vision.VisibleTargets != null)
 		{
@@ -24,11 +24,5 @@ public class UnitVisionEditor : Editor {
 				}
 			}
 		}
-	}
-
-	private Vector3 DirectionFromAngle(float angle)
-	{
-		angle += vision.transform.eulerAngles.y;
-		return new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad), 0, Mathf.Cos(angle * Mathf.Deg2Rad));
 	}
 }
