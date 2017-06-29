@@ -68,13 +68,13 @@ public class GameManager : MonoBehaviour
 		// only send per empalcement whicih isnt occup[ied
 		if (SelectedDefenders.Count > 0)
 		{
-			var emplacements = Physics.OverlapSphere(location, SelectedDefenders.Count * 1.5f, EmplacementsLayer);
+			var emplacements = Physics.OverlapSphere(location, SelectedDefenders.Count * 1f, EmplacementsLayer);
 			if (emplacements.Length > 0)
 			{
 				var sortedUnoccupiedEmplacements = emplacements
 					.Select(c => c.GetComponent<Emplacement>())
 					.Where(e => e.Occupant == null)
-					.OrderByDescending(e => Vector3.Distance(e.transform.position, SelectedDefenders.First().transform.position))
+					.OrderBy(e => Vector3.Distance(e.transform.position, ClosestDefender(SelectedDefenders, e.transform.position).transform.position))
 					.ToArray();
 
 				var emplacementCount = sortedUnoccupiedEmplacements.Count();
@@ -135,6 +135,35 @@ public class GameManager : MonoBehaviour
 		{
 			ResetGame();
 		}
+	}
+
+	private Defender ClosestDefender(IEnumerable<Defender> defenders, Vector3 location)
+	{
+		var closestDistance = Mathf.Infinity;
+		Defender closestDefender = null;
+
+		foreach (var defender in defenders)
+		{
+			var samplePath = new NavMeshPath();
+			defender.NavMeshAgent.CalculatePath(transform.position, samplePath);
+			var samplePathLength = 0f;
+			for (int i = 1; i < samplePath.corners.Length; i++)
+			{
+				samplePathLength += Vector3.Distance(samplePath.corners[i - 1], samplePath.corners[i]);
+			}
+
+			if (closestDefender == null)
+			{
+				closestDefender = defender;
+			}
+			else if (closestDistance > samplePathLength)
+			{
+				closestDefender = defender;
+				closestDistance = samplePathLength;
+			}
+		}
+
+		return closestDefender;
 	}
 
 	private void ResetGame()

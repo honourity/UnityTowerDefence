@@ -63,9 +63,14 @@ public class Emplacement : MonoBehaviour
 		if (other.tag == "Defender" && Occupant == null)
 		{
 			var defender = other.GetComponent<Defender>();
-			Occupant = defender;
-			Occupant.NavMeshAgent.ResetPath();
-			Occupant.transform.SetPositionAndRotation(transform.position + new Vector3(0, 0.5f, 0), transform.rotation);
+
+			//only grab defender if they are heading to this location roughly
+			if (Vector3.Distance(defender.NavMeshAgent.destination, transform.position) < 1f)
+			{
+				Occupant = defender;
+				Occupant.NavMeshAgent.ResetPath();
+				Occupant.transform.SetPositionAndRotation(transform.position + new Vector3(0, 0.5f, 0), transform.rotation);
+			}
 		}
 	}
 
