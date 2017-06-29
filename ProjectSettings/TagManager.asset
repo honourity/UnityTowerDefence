@@ -6,6 +6,7 @@ TagManager:
   tags:
   - EnemyObjective
   - Enemy
+  - Defender
   layers:
   - Default
   - TransparentFX
@@ -17,9 +18,9 @@ TagManager:
   - 
   - Buildings
   - Environment
-  - 
-  - 
-  - 
+  - Defenders
+  - Emplacements
+  - Enemies
   - 
   - 
   - 
