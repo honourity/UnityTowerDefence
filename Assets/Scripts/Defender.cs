@@ -19,15 +19,22 @@ public class Defender : Unit
 			if (_currentEmplacement != null) _currentEmplacement.Occupant = null;
 			_currentEmplacement = value;
 			if ((_currentEmplacement != null) && (_currentEmplacement.Occupant != this)) _currentEmplacement.Occupant = this;
+
+			ReduceCollisionWithOtherAgents(_currentEmplacement != null);
 		}
 	}
 
 	private Emplacement _currentEmplacement;
 	private List<Outline> outlineRenderers;
+	private float _navMeshAgentOriginalRadius;
+	//private int _navMeshAgentOriginalAvoidancePriority;
 
 	protected override void Awake()
 	{
 		base.Awake();
+
+		_navMeshAgentOriginalRadius = NavMeshAgent.radius;
+		//_navMeshAgentOriginalAvoidancePriority = NavMeshAgent.avoidancePriority;
 
 		SetupOutlineRenderers();
 	}
@@ -83,6 +90,22 @@ public class Defender : Unit
 		}
 
 		base.Attack();
+	}
+
+
+	private void ReduceCollisionWithOtherAgents(bool enable)
+	{
+		//if on an emplacement, dont collide with other defenders
+		if (enable)
+		{
+			NavMeshAgent.radius = 0.01f;
+			//NavMeshAgent.avoidancePriority = 0;
+		}
+		else
+		{
+			NavMeshAgent.radius = _navMeshAgentOriginalRadius;
+			//NavMeshAgent.avoidancePriority = _navMeshAgentOriginalAvoidancePriority;
+		}
 	}
 
 	private void SetupOutlineRenderers()

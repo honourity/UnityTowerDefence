@@ -64,7 +64,38 @@ public class GameManager : MonoBehaviour
 
 	public void MoveSelectedDefenders(Vector3 location)
 	{
-		SelectedDefenders.ForEach(defender => defender.GetComponent<NavMeshAgent>().SetDestination(location));
+		//spherecast on location, get list of emplacements ordered by distance, from furthest first, send selected defenders to emplacements
+		// only send per empalcement whicih isnt occup[ied
+		if (SelectedDefenders.Count > 0)
+		{
+			var emplacements = Physics.OverlapSphere(location, SelectedDefenders.Count * 1.5f, EmplacementsLayer);
+			if (emplacements.Length > 0)
+			{
+				var sortedUnoccupiedEmplacements = emplacements
+					.Select(c => c.GetComponent<Emplacement>())
+					.Where(e => e.Occupant == null)
+					.OrderByDescending(e => Vector3.Distance(e.transform.position, SelectedDefenders.First().transform.position))
+					.ToArray();
+
+				var emplacementCount = sortedUnoccupiedEmplacements.Count();
+				for (int i = 0; i < emplacementCount; i++)
+				{
+					if (SelectedDefenders.Count > i)
+					{
+						SelectedDefenders[i].GetComponent<NavMeshAgent>().SetDestination(sortedUnoccupiedEmplacements[i].transform.position);
+					}
+					else
+					{
+						break;
+					}
+				}
+			}
+			else
+			{
+				//todo - make this a bit more spread out so they dont try and push into each other
+				SelectedDefenders.ForEach(defender => defender.GetComponent<NavMeshAgent>().SetDestination(location));
+			}
+		}
 	}
 
 	public void ClearDefenderSelection()

@@ -68,4 +68,12 @@ public class Emplacement : MonoBehaviour
 			Occupant.transform.SetPositionAndRotation(transform.position + new Vector3(0, 0.5f, 0), transform.rotation);
 		}
 	}
+
+	private void OnTriggerExit(Collider other)
+	{
+		if (other.tag == "Defender" && Occupant == other.GetComponent<Defender>())
+		{
+			Occupant = null;
+		}
+	}
 }

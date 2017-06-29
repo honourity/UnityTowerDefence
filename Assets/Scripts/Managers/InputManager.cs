@@ -46,7 +46,7 @@ public class InputManager : MonoBehaviour
 
 			//box selection
 			SelectionInProgress = true;
-			mousePosition1 = Input.mousePosition;
+			boxSelectionStartingPoint = Input.mousePosition;
 
 			if (defenderHit.transform != null)
 			{
@@ -85,7 +85,7 @@ public class InputManager : MonoBehaviour
 
 	#region BoxSelection
 
-	private Vector3 mousePosition1;
+	private Vector3 boxSelectionStartingPoint;
 
 	private Texture2D _whiteTexture;
 	private Texture2D WhiteTexture
@@ -110,7 +110,7 @@ public class InputManager : MonoBehaviour
 
 		var camera = Camera.main;
 		var viewportBounds =
-			 GetViewportBounds(camera, mousePosition1, Input.mousePosition);
+			 GetViewportBounds(camera, boxSelectionStartingPoint, Input.mousePosition);
 
 		return viewportBounds.Contains(
 			 camera.WorldToViewportPoint(gameObject.transform.position));
@@ -121,7 +121,7 @@ public class InputManager : MonoBehaviour
 		if (SelectionInProgress)
 		{
 			// Create a rect from both mouse positions
-			var rect = GetScreenRect(mousePosition1, Input.mousePosition);
+			var rect = GetScreenRect(boxSelectionStartingPoint, Input.mousePosition);
 			DrawScreenRect(rect, new Color(0.8f, 0.8f, 0.95f, 0.25f));
 			DrawScreenRectBorder(rect, 2, new Color(0.8f, 0.8f, 0.95f));
 		}
