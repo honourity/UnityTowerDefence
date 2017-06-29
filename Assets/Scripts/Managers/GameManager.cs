@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
@@ -44,28 +45,37 @@ public class GameManager : MonoBehaviour
 	public int BuildingsRemaining;
 	public int BuildingsDestroyed;
 
-	public Defender SelectedDefender { get; set; }
+	public List<Defender> SelectedDefenders;
 	public Emplacement HighlightedEmplacement { get; set; }
 
 	public void SpawnEnemy()
 	{
-		Instantiate(EnemyPrefab, EnemySpawn.position, EnemySpawn.rotation);
+		//Instantiate(EnemyPrefab, EnemySpawn.position, EnemySpawn.rotation);
 	}
 
 	public void SelectDefender(Defender defender)
 	{
-		if (SelectedDefender != null) SelectedDefender.Selected = false;
-		SelectedDefender = defender;
-		if (defender != null) defender.Selected = true;
+		if (SelectedDefenders != null && defender != null)
+		{
+			if (!SelectedDefenders.Contains(defender)) SelectedDefenders.Add(defender);
+			defender.Selected = true;
+		}
 	}
 
-	public void MoveSelectedDefender(Vector3 location)
+	public void MoveSelectedDefenders(Vector3 location)
 	{
-		if (HighlightedEmplacement != null && HighlightedEmplacement.Occupant == null)
-		{
-			SelectedDefender.CurrentEmplacement = HighlightedEmplacement;
-			SelectedDefender.GetComponent<NavMeshAgent>().SetDestination(location);
-		}
+		SelectedDefenders.ForEach(defender => defender.GetComponent<NavMeshAgent>().SetDestination(location));
+	}
+
+	public void ClearDefenderSelection()
+	{
+		SelectedDefenders.ForEach(defender => defender.Selected = false);
+		SelectedDefenders.Clear();
+	}
+
+	private void Awake()
+	{
+		SelectedDefenders = new List<Defender>();
 	}
 
 	private void Start()

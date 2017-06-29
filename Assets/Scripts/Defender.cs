@@ -13,11 +13,12 @@ public class Defender : Unit
 		{
 			return _currentEmplacement;
 		}
+
 		set
 		{
 			if (_currentEmplacement != null) _currentEmplacement.Occupant = null;
 			_currentEmplacement = value;
-			if (_currentEmplacement != null) _currentEmplacement.Occupant = this;
+			if ((_currentEmplacement != null) && (_currentEmplacement.Occupant != this)) _currentEmplacement.Occupant = this;
 		}
 	}
 
@@ -50,6 +51,12 @@ public class Defender : Unit
 			Vision.Display = false;
 		}
 		MouseHovering = false;
+
+		//box selection
+		if (InputManager.Instance.IsWithinSelectionBounds(gameObject))
+		{
+			GameManager.Instance.SelectDefender(this);
+		}
 
 		//rendering unit selection highlight
 		if (Selected)

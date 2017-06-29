@@ -5,10 +5,23 @@ public class Emplacement : MonoBehaviour
 {
 	public float DestructionDisplacement = 3f;
 	public GameObject HighlightedDisplay;
-	public UnitVision Vision { get; private set; }
-	public Defender Occupant { get; set; }
 
+	public UnitVision Vision { get; private set; }
+	public Defender Occupant {
+		get
+		{
+			return _occupant;
+		}
+
+		set
+		{
+			_occupant = value;
+			if ((_occupant != null) && (_occupant.CurrentEmplacement != this)) _occupant.CurrentEmplacement = this;
+		}
+	}
 	public bool MouseHovering { get; set; }
+
+	private Defender _occupant;
 
 	private void Start()
 	{
@@ -17,12 +30,6 @@ public class Emplacement : MonoBehaviour
 
 	private void Update()
 	{
-		if (Occupant != null && Vector3.Distance(Occupant.transform.position, transform.position) < 1f)
-		{
-			Occupant.NavMeshAgent.ResetPath();
-			Occupant.transform.SetPositionAndRotation(transform.position + new Vector3(0, 0.5f, 0), transform.rotation);
-		}
-
 		ProcessHighlighting();
 	}
 
@@ -49,5 +56,16 @@ public class Emplacement : MonoBehaviour
 		}
 
 		MouseHovering = false;
+	}
+
+	private void OnTriggerEnter(Collider other)
+	{
+		if (other.tag == "Defender" && Occupant == null)
+		{
+			var defender = other.GetComponent<Defender>();
+			Occupant = defender;
+			Occupant.NavMeshAgent.ResetPath();
+			Occupant.transform.SetPositionAndRotation(transform.position + new Vector3(0, 0.5f, 0), transform.rotation);
+		}
 	}
 }
