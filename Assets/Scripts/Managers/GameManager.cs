@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.AI;
 
 [DisallowMultipleComponent]
-public class GameManager : MonoBehaviour {
+public class GameManager : MonoBehaviour
+{
 	public static GameManager Instance
 	{
 		get { return _instance = _instance ?? FindObjectOfType<GameManager>() ?? new GameManager { }; }
@@ -24,9 +26,10 @@ public class GameManager : MonoBehaviour {
 	public Transform EnemySpawn;
 	public Enemy EnemyPrefab;
 	public Defender DefenderPrefab;
-	public Building[] Buildings;
-	public LayerMask BuildingsLayerMask;
-	public LayerMask EnvironmentLayerMask;
+	public LayerMask DefendersLayer;
+	public LayerMask EnvironmentLayer;
+	public LayerMask BuildingsLayer;
+	public LayerMask EmplacementsLayer;
 
 	[Header("Settings")]
 	public int ObjectiveLives = 10;
@@ -42,50 +45,72 @@ public class GameManager : MonoBehaviour {
 	public int BuildingsRemaining;
 	public int BuildingsDestroyed;
 
-	public bool DefenderSelected { get; private set; }
-	private GameObject _selectedDefender;
-
-	public void BuildingInteractionStarted(Building building)
-	{
-		if (DefenderSelected)
-		{
-			PlaceDefender(building);
-		}
-		else
-		{
-			SelectDefender(building);
-		}
-	}
-	public void BuildingInteractionEnded(Building building)
-	{
-		if (DefenderSelected)
-		{
-			PlaceDefender(building);
-		}
-	}
-	public void NoBuildingInteractionStarted()
-	{
-		if (DefenderSelected)
-		{
-			DropDefender();
-		}
-	}
-	public void NoBuildingInteractionEnded()
-	{
-		if (DefenderSelected)
-		{
-			DropDefender();
-		}
-	}
+	public List<Defender> SelectedDefenders;
+	public Emplacement HighlightedEmplacement { get; set; }
 
 	public void SpawnEnemy()
 	{
-		Instantiate(EnemyPrefab, EnemySpawn.position, EnemySpawn.rotation);
+		//Instantiate(EnemyPrefab, EnemySpawn.position, EnemySpawn.rotation);
+	}
+
+	public void SelectDefender(Defender defender)
+	{
+		if (SelectedDefenders != null && defender != null)
+		{
+			if (!SelectedDefenders.Contains(defender)) SelectedDefenders.Add(defender);
+			defender.Selected = true;
+		}
+	}
+
+	public void MoveSelectedDefenders(Vector3 location)
+	{
+		//spherecast on location, get list of emplacements ordered by distance, from furthest first, send selected defenders to emplacements
+		// only send per empalcement whicih isnt occup[ied
+		if (SelectedDefenders.Count > 0)
+		{
+			var emplacements = Physics.OverlapSphere(location, SelectedDefenders.Count * 1f, EmplacementsLayer);
+			if (emplacements.Length > 0)
+			{
+				var sortedUnoccupiedEmplacements = emplacements
+					.Select(c => c.GetComponent<Emplacement>())
+					.Where(e => e.Occupant == null)
+					.OrderBy(e => Vector3.Distance(e.transform.position, ClosestDefender(SelectedDefenders, e.transform.position).transform.position))
+					.ToArray();
+
+				var emplacementCount = sortedUnoccupiedEmplacements.Count();
+				for (int i = 0; i < emplacementCount; i++)
+				{
+					if (SelectedDefenders.Count > i)
+					{
+						SelectedDefenders[i].GetComponent<NavMeshAgent>().SetDestination(sortedUnoccupiedEmplacements[i].transform.position);
+					}
+					else
+					{
+						break;
+					}
+				}
+			}
+			else
+			{
+				//todo - make this a bit more spread out so they dont try and push into each other
+				SelectedDefenders.ForEach(defender => defender.GetComponent<NavMeshAgent>().SetDestination(location));
+			}
+		}
+	}
+
+	public void ClearDefenderSelection()
+	{
+		SelectedDefenders.ForEach(defender => defender.Selected = false);
+		SelectedDefenders.Clear();
+	}
+
+	private void Awake()
+	{
+		SelectedDefenders = new List<Defender>();
 	}
 
 	private void Start()
 	{
-		BuildingsRemaining = Buildings.Length;
 		ObjectiveLivesRemaining = ObjectiveLives;
 		TimeUntilNextWave = 3f;
 
@@ -93,11 +118,6 @@ public class GameManager : MonoBehaviour {
 		DefendersKilled = 0;
 		EnemiesKilled = 0;
 		BuildingsDestroyed = 0;
-
-		for (int i = 0; i < Buildings.Length; i++)
-		{
-			Buildings[i].AddDefenders(Random.Next(0, 6));
-		}
 	}
 
 	private void Update()
@@ -115,39 +135,48 @@ public class GameManager : MonoBehaviour {
 		{
 			ResetGame();
 		}
-
-		if (DefenderSelected)
-		{
-			FollowMousePosition();
-		}
 	}
 
-	private void FollowMousePosition()
+	private Defender ClosestDefender(IEnumerable<Defender> defenders, Vector3 location)
 	{
-		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		RaycastHit hit;
-		if (Physics.Raycast(ray, out hit, Mathf.Infinity, EnvironmentLayerMask + BuildingsLayerMask))
+		var closestDistance = Mathf.Infinity;
+		Defender closestDefender = null;
+
+		foreach (var defender in defenders)
 		{
-			_selectedDefender.transform.position = hit.point + new Vector3(0, 0.5f, 0);
+			var samplePath = new NavMeshPath();
+			defender.NavMeshAgent.CalculatePath(transform.position, samplePath);
+			var samplePathLength = 0f;
+			for (int i = 1; i < samplePath.corners.Length; i++)
+			{
+				samplePathLength += Vector3.Distance(samplePath.corners[i - 1], samplePath.corners[i]);
+			}
+
+			if (closestDefender == null)
+			{
+				closestDefender = defender;
+			}
+			else if (closestDistance > samplePathLength)
+			{
+				closestDefender = defender;
+				closestDistance = samplePathLength;
+			}
 		}
+
+		return closestDefender;
 	}
 
 	private void ResetGame()
 	{
 		//remove all enemies
 		FindObjectsOfType<Enemy>().ToList().ForEach(e => Destroy(e.gameObject));
-
-		//remove all defenders
-		for (int i = 0; i < Buildings.Length; i++)
-		{
-			Buildings[i].RemoveAllDefenders();
-		}
+		FindObjectsOfType<Defender>().ToList().ForEach(e => Destroy(e.gameObject));
 
 		//start again
 		Start();
 	}
 
-	private IEnumerator SpawnWave()
+	public IEnumerator SpawnWave()
 	{
 		var spawned = EnemiesPerWave;
 
@@ -159,27 +188,9 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-	private void SelectDefender(Building building)
+	public Defender SpawnStrayDefender(Vector3 location)
 	{
-		if (building.Defenders.Count > 0)
-		{
-			DefenderSelected = true;
-			building.RemoveDefender();
-			_selectedDefender = Instantiate(DefenderPrefab, gameObject.transform).gameObject;
-			FollowMousePosition();
-		}
-	}
-
-	private void PlaceDefender(Building building)
-	{
-		DefenderSelected = false;
-		building.AddDefender();
-		Destroy(_selectedDefender);
-	}
-
-	private void DropDefender()
-	{
-		DefenderSelected = false;
-		Destroy(_selectedDefender);
+		var defender = Instantiate(DefenderPrefab, new Vector3(location.x, location.y + 0.5f, location.z), Quaternion.identity);
+		return defender;
 	}
 }

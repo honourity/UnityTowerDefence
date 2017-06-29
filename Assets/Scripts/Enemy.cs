@@ -1,33 +1,42 @@
 ﻿using UnityEngine;
-using UnityEngine.AI;
 
-public class Enemy : MonoBehaviour {
+public class Enemy : Unit
+{
+	[HideInInspector]
+	public UnitHearing Hearing { get; protected set; }
 
-	public int Health = 1;
-	public float Speed = 5;
+	private Transform _navigationObjective;
 
-	private Transform _target;
-	private NavMeshAgent _navMeshAgent;
-
-	public void TakeDamage(int damage)
+	protected override void Awake()
 	{
-		Health -= damage;
-		if (Health <= 0)
+		base.Awake();
+
+		Hearing = GetComponent<UnitHearing>();
+
+		_navigationObjective = GameObject.FindWithTag("EnemyObjective").transform;
+	}
+
+	protected override void Start()
+	{
+		base.Start();
+	}
+
+	protected override void Update()
+	{
+		base.Update();
+
+		if (Hearing.ClosestInRangeTarget != null)
 		{
-			GameManager.Instance.EnemiesKilled++;
-			Destroy(gameObject);
+			NavMeshAgent.SetDestination(Hearing.ClosestInRangeTarget.gameObject.transform.position);
+		}
+		else
+		{
+			NavMeshAgent.SetDestination(_navigationObjective.position);
 		}
 	}
 
-	private void Awake()
+	private void OnDestroy()
 	{
-		_target = GameObject.FindWithTag("EnemyObjective").transform;
-		_navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
-	}
-
-	private void Start()
-	{
-		_navMeshAgent.speed = Speed;
-		_navMeshAgent.SetDestination(_target.position);
+		GameManager.Instance.EnemiesKilled++;
 	}
 }

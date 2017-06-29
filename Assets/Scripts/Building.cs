@@ -1,67 +1,49 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-using System.Linq;
+﻿using UnityEngine;
 
-public class Building : MonoBehaviour {
+public class Building : MonoBehaviour, ITargetable {
 
-	public Defender DefenderPrefab;
-	public Transform DefenderSpawn;
+	public int Health = 10;
+	public GameObject ShowHideMeshSection;
+	public GameObject DeadPrefab;
 
-	public List<Defender> Defenders { get; private set; }
+	public bool MouseHovering { get; set; }
 
-	private void Awake()
+	private void Start()
 	{
-		Defenders = new List<Defender>();
+		GameManager.Instance.BuildingsRemaining++;
 	}
 
-	public void AddDefenders(int numDefenders)
+	public bool TakeDamage(int damage)
 	{
-		for (int i = 0; i < numDefenders; i++)
+		Health -= damage;
+
+		if (Health <= 0)
 		{
-			if (Defenders.Count < 25)
-			{
-				AddDefender();
-			}
-			else
-			{
-				Debug.Log("No defenders added to " + gameObject.name + " because it it full already!");
-				break;
-			}
-		}
-	}
-	public void AddDefender()
-	{
-		var spawnPos = DefenderSpawn.transform.position + new Vector3(0.5f, 0.5f, -0.5f);
-		var offsetX = Defenders.Count % 5;
-		var offsetZ = -(Defenders.Count / 5);
-
-		spawnPos.x += offsetX;
-		spawnPos.z += offsetZ;
-		var defender = Instantiate(DefenderPrefab, spawnPos, DefenderSpawn.transform.rotation, gameObject.transform);
-		defender.transform.localScale = new Vector3(0.2f, 0.5f, 0.2f);
-		Defenders.Add(defender);
-	}
-
-	public bool RemoveDefender()
-	{
-		if (Defenders.Count > 0)
-		{
-			var lastDefender = Defenders.Last();
-			Defenders.Remove(lastDefender);
-			Destroy(lastDefender.gameObject);
+			if (DeadPrefab != null) Instantiate(DeadPrefab, transform.position, transform.rotation);
+			Destroy(gameObject);
 			return true;
+		}
+
+		return false;
+	}
+
+	private void OnDestroy()
+	{
+		GameManager.Instance.BuildingsDestroyed++;
+		GameManager.Instance.BuildingsRemaining--;
+	}
+
+	private void Update()
+	{
+		if (MouseHovering)
+		{
+			ShowHideMeshSection.SetActive(false);
 		}
 		else
 		{
-			return false;
+			ShowHideMeshSection.SetActive(true);
 		}
-	}
 
-	public void RemoveAllDefenders()
-	{
-		for (int i = 0; i <= Defenders.Count; i++)
-		{
-			RemoveDefender();
-		}
+		MouseHovering = false;
 	}
 }

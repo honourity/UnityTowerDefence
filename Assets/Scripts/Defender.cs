@@ -1,89 +1,134 @@
-﻿using System.Collections.Generic;
+﻿using cakeslice;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
-public class Defender : MonoBehaviour {
-
-	public float AttackRange = 5f;
-	public float AttackCooldown = 2f;
-	public int AttackDamage = 1;
-
-	private List<Enemy> _enemiesInRange;
-	private SphereCollider _attackRangeCollider;
-	private LineRenderer _laser;
-	private float _currentAttackCooldown;
-
-	private void Awake()
+public class Defender : Unit
+{
+	public bool Selected { get; set; }
+	public bool MouseHovering { get; set; }
+	public Emplacement CurrentEmplacement
 	{
-		_enemiesInRange = new List<Enemy>();
-		_attackRangeCollider = GetComponent<SphereCollider>();
-		_laser = GetComponent<LineRenderer>();
-	}
-
-	private void Start()
-	{
-		_attackRangeCollider.radius = AttackRange;
-	}
-
-	private void Update()
-	{
-		_currentAttackCooldown = Mathf.MoveTowards(_currentAttackCooldown, 0, Time.deltaTime);
-
-		if (_currentAttackCooldown < 0.01)
+		get
 		{
-			Enemy closestEnemy = null;
-			var closestDistance = Mathf.Infinity;
+			return _currentEmplacement;
+		}
 
-			_enemiesInRange.RemoveAll(e => e == null);
+		set
+		{
+			if (_currentEmplacement != null) _currentEmplacement.Occupant = null;
+			_currentEmplacement = value;
+			if ((_currentEmplacement != null) && (_currentEmplacement.Occupant != this)) _currentEmplacement.Occupant = this;
 
-			foreach (var enemyInRange in _enemiesInRange)
-			{
-				if (closestEnemy == null)
-				{
-					closestEnemy = enemyInRange;
-					continue;
-				}
-				else
-				{
-					var distance = Vector3.Distance(gameObject.transform.position, enemyInRange.transform.position);
-					if (distance < closestDistance)
-					{
-						closestDistance = distance;
-						closestEnemy = enemyInRange;
-					}
-				}
-			}
-
-			if (closestEnemy != null)
-			{
-				Debug.DrawLine(gameObject.transform.position, closestEnemy.transform.position, Color.yellow, 0.5f);
-				_laser.SetPositions(new Vector3[2] { gameObject.transform.position, closestEnemy.transform.position });
-				_laser.enabled = true;
-				Invoke("TurnOffLaser", 0.125f);
-				_currentAttackCooldown = AttackCooldown;
-
-				closestEnemy.TakeDamage(AttackDamage);
-			}
+			ReduceCollisionWithOtherAgents(_currentEmplacement != null);
 		}
 	}
 
-	private void OnTriggerEnter(Collider other)
+	private Emplacement _currentEmplacement;
+	private List<Outline> outlineRenderers;
+	private float _navMeshAgentOriginalRadius;
+	//private int _navMeshAgentOriginalAvoidancePriority;
+
+	protected override void Awake()
 	{
-		if (other.tag == "Enemy")
+		base.Awake();
+
+		_navMeshAgentOriginalRadius = NavMeshAgent.radius;
+		//_navMeshAgentOriginalAvoidancePriority = NavMeshAgent.avoidancePriority;
+
+		SetupOutlineRenderers();
+	}
+
+	protected override void Start()
+	{
+		base.Start();
+	}
+
+	protected override void Update()
+	{
+		base.Update();
+
+		//rendering field of vision display
+		if (MouseHovering && CurrentEmplacement == null)
 		{
-			_enemiesInRange.Add(other.gameObject.GetComponent<Enemy>());
+			Vision.Display = true;
+		}
+		else
+		{
+			Vision.Display = false;
+		}
+		MouseHovering = false;
+
+		//box selection
+		if (InputManager.Instance.IsWithinSelectionBounds(gameObject))
+		{
+			GameManager.Instance.SelectDefender(this);
+		}
+
+		//rendering unit selection highlight
+		if (Selected)
+		{
+			outlineRenderers.ForEach(renderer => renderer.enabled = true);
+		}
+		else
+		{
+			outlineRenderers.ForEach(renderer => renderer.enabled = false);
 		}
 	}
 
-	private void OnTriggerExit(Collider other)
+	private void OnDestroy()
 	{
-		if (other.tag == "Enemy")
+		GameManager.Instance.DefendersKilled++;
+	}
+
+	protected override void Attack()
+	{
+		_currentlyActiveVision = Vision;
+		if (CurrentEmplacement != null && Vector3.Distance(transform.position, CurrentEmplacement.transform.position) < NavMeshAgent.stoppingDistance)
 		{
-			_enemiesInRange.Remove(other.gameObject.GetComponent<Enemy>());
+			_currentlyActiveVision = CurrentEmplacement.Vision;
+		}
+
+		base.Attack();
+	}
+
+
+	private void ReduceCollisionWithOtherAgents(bool enable)
+	{
+		//if on an emplacement, dont collide with other defenders
+		if (enable)
+		{
+			NavMeshAgent.radius = 0.01f;
+			//NavMeshAgent.avoidancePriority = 0;
+		}
+		else
+		{
+			NavMeshAgent.radius = _navMeshAgentOriginalRadius;
+			//NavMeshAgent.avoidancePriority = _navMeshAgentOriginalAvoidancePriority;
 		}
 	}
 
-	private void TurnOffLaser()
+	private void SetupOutlineRenderers()
 	{
-		_laser.enabled = false;
+		var meshRenderer = gameObject.GetComponent<MeshRenderer>();
+
+		////disabled including children in outliner, until we have some proper art assets
+		//int count = gameObject.transform.childCount;
+		//if (count > 0)
+		//{
+		//	for (int i = 0; i < count; i++)
+		//	{
+		//		var child = gameObject.transform.GetChild(i);
+		//		meshRenderers.AddRange(child.gameObject.GetComponents<MeshRenderer>());
+		//	}
+		//}
+
+		if (outlineRenderers == null) outlineRenderers = new List<Outline>();
+
+		//foreach (var meshRenderer in meshRenderers)
+		//{
+			var outlineRenderer = meshRenderer.gameObject.AddComponent<Outline>();
+			outlineRenderers.Add(outlineRenderer);
+		//}
 	}
 }
