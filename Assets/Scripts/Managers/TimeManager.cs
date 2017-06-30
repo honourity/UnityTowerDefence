@@ -3,7 +3,7 @@ using System.Globalization;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HourTimer : MonoBehaviour
+public class TimeManager : MonoBehaviour
 {
 	public int Timescale = 1;
 	[Tooltip("In the format: 'hh:mm tt' such as '9:00 AM'")]
