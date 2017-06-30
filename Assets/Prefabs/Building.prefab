@@ -2379,7 +2379,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4cb3b289a692a84aafa2c185be0f247, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Health: 10
+  Health: 50
   ShowHideMeshSection: {fileID: 1919249827072310}
   DeadPrefab: {fileID: 1440403673405342, guid: 852e02d963b1e714ab2e038e3676cda2, type: 2}
 --- !u!114 &114877202090688076

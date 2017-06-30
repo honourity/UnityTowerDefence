@@ -13,14 +13,14 @@ public class GameManager : MonoBehaviour
 	}
 	private static GameManager _instance;
 
-	public System.Random Random
+	public static System.Random Random
 	{
 		get
 		{
 			return _random = _random ?? new System.Random();
 		}
 	}
-	private System.Random _random;
+	private static System.Random _random;
 
 	[Header("Dependencies")]
 	public Transform EnemySpawn;
@@ -34,8 +34,9 @@ public class GameManager : MonoBehaviour
 	[Header("Settings")]
 	public int ObjectiveLives = 10;
 	public float SecondsBetweenWaves = 10;
-	public int EnemiesPerWave = 5;
-	
+	[HideInInspector]
+	public int EnemyWaveSize = 1;
+
 	[Header("Live Stats")]
 	public float TimeUntilNextWave;
 	public int WavesSurvived;
@@ -45,12 +46,12 @@ public class GameManager : MonoBehaviour
 	public int BuildingsRemaining;
 	public int BuildingsDestroyed;
 
-	public List<Defender> SelectedDefenders;
+	public List<Defender> SelectedDefenders { get; set; }
 	public Emplacement HighlightedEmplacement { get; set; }
 
 	public void SpawnEnemy()
 	{
-		//Instantiate(EnemyPrefab, EnemySpawn.position, EnemySpawn.rotation);
+		Instantiate(EnemyPrefab, EnemySpawn.position, EnemySpawn.rotation);
 	}
 
 	public void SelectDefender(Defender defender)
@@ -145,7 +146,7 @@ public class GameManager : MonoBehaviour
 		foreach (var defender in defenders)
 		{
 			var samplePath = new NavMeshPath();
-			defender.NavMeshAgent.CalculatePath(transform.position, samplePath);
+			if (defender.NavMeshAgent != null) defender.NavMeshAgent.CalculatePath(transform.position, samplePath);
 			var samplePathLength = 0f;
 			for (int i = 1; i < samplePath.corners.Length; i++)
 			{
@@ -178,7 +179,7 @@ public class GameManager : MonoBehaviour
 
 	public IEnumerator SpawnWave()
 	{
-		var spawned = EnemiesPerWave;
+		var spawned = EnemyWaveSize;
 
 		while (spawned > 0)
 		{
@@ -186,6 +187,8 @@ public class GameManager : MonoBehaviour
 			spawned--;
 			yield return null;
 		}
+
+		EnemyWaveSize++;
 	}
 
 	public Defender SpawnStrayDefender(Vector3 location)

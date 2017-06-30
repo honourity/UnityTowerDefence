@@ -23,7 +23,7 @@ public class UIStatsController : MonoBehaviour
 			GameManager.Instance.DefendersKilled,
 			GameManager.Instance.BuildingsRemaining,
 			GameManager.Instance.ObjectiveLivesRemaining,
-			GameManager.Instance.EnemiesPerWave,
+			GameManager.Instance.EnemyWaveSize,
 			GameManager.Instance.EnemiesKilled);
 	}
 }
