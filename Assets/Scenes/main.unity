@@ -1359,6 +1359,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Timescale: 60
+  StartTime: 9:00 AM
 --- !u!1 &1030812431
 GameObject:
   m_ObjectHideFlags: 0
