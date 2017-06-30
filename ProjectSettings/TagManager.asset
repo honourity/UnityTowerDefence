@@ -6,6 +6,11 @@ TagManager:
   tags:
   - EnemyObjective
   - Enemy
+  - UnitSelector
+  - Ground
+  - Soil
+  - Unit
+  - MouseManager
   layers:
   - Default
   - TransparentFX
