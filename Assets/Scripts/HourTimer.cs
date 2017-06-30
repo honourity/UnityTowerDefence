@@ -1,16 +1,21 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Globalization;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class HourTimer : MonoBehaviour
 {
-	public int timescale = 1;
+	public int Timescale = 1;
+	[Tooltip("In the format: 'hh:mm tt' such as '9:00 AM'")]
+	public string StartTime = "9:00 AM";
 
-	private Text hourText;
-	public double minutes, hours, seconds;
+	private Text _hourText;
+	private DateTime _time;
 
 	void Start()
 	{
-		hourText = GameObject.Find("HourText").GetComponent<Text>();
+		_hourText = GameObject.Find("HourText").GetComponent<Text>();
+		_time = DateTime.ParseExact(StartTime, "h:mm tt", CultureInfo.InvariantCulture); ;
 	}
 
 	void Update()
@@ -20,24 +25,8 @@ public class HourTimer : MonoBehaviour
 
 	void CalculateTime()
 	{
-		seconds += Time.deltaTime * timescale;
+		_time = _time.AddSeconds(Time.deltaTime * Timescale);
 
-		if (seconds >= 60)
-		{
-			minutes++;
-			seconds = 0;
-		}
-
-		if (minutes >= 60)
-		{
-			hours++;
-			minutes = 0;
-		}
-		else if (hours >= 24)
-		{
-			hours = 0;
-		}
-
-		hourText.text = string.Format("{0}:{1}:{2}", hours, minutes, seconds);
+		_hourText.text = _time.ToString("h:mm tt");
 	}
 }

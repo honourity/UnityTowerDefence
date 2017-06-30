@@ -34,8 +34,6 @@ public class GameManager : MonoBehaviour
 	[Header("Settings")]
 	public int ObjectiveLives = 10;
 	public float SecondsBetweenWaves = 10;
-	[HideInInspector]
-	public int EnemyWaveSize = 1;
 
 	[Header("Live Stats")]
 	public float TimeUntilNextWave;
@@ -46,6 +44,7 @@ public class GameManager : MonoBehaviour
 	public int BuildingsRemaining;
 	public int BuildingsDestroyed;
 
+	public int EnemyWaveSize { get; set; }
 	public List<Defender> SelectedDefenders { get; set; }
 	public Emplacement HighlightedEmplacement { get; set; }
 
