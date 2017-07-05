@@ -23,8 +23,13 @@ public class Unit : MonoBehaviour, ITargetable
 		if (Health <= 0)
 		{
 			if (DeadPrefab != null) Instantiate(DeadPrefab, transform.position, transform.rotation);
+			AudioManager.Instance.PlayClip(AudioManager.AudioClipNames.SFXDeath1);
 			Destroy(gameObject);
 			return true;
+		}
+		else
+		{
+			AudioManager.Instance.PlayClip(AudioManager.AudioClipNames.SFXHit);
 		}
 
 		return false;
@@ -36,6 +41,9 @@ public class Unit : MonoBehaviour, ITargetable
 		{
 			_laser.SetPositions(new Vector3[2] { gameObject.transform.position, _currentlyActiveVision.ClosestInRangeTarget.gameObject.transform.position });
 			_laser.enabled = true;
+
+			AudioManager.Instance.PlayClip(AudioManager.AudioClipNames.SFXGunshot);
+
 			Invoke("TurnOffLaser", 0.125f);
 			_currentAttackCooldown = AttackCooldown;
 

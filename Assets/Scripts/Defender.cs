@@ -78,6 +78,7 @@ public class Defender : Unit
 
 	private void OnDestroy()
 	{
+		GameManager.Instance.SelectedDefenders.Remove(this);
 		GameManager.Instance.DefendersKilled++;
 	}
 

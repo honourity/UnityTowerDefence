@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 374807710}
-  m_IndirectSpecularColor: {r: 0.43667564, g: 0.48427135, b: 0.5645232, a: 1}
+  m_IndirectSpecularColor: {r: 0.4366757, g: 0.48427194, b: 0.5645252, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -403,6 +403,11 @@ Prefab:
     - target: {fileID: 1800666341468914, guid: 1130a05b878f0d2419d561ef4ec44b61, type: 2}
       propertyPath: m_Name
       value: Defender (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 23954786516331560, guid: 1130a05b878f0d2419d561ef4ec44b61,
+        type: 2}
+      propertyPath: m_CastShadows
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1130a05b878f0d2419d561ef4ec44b61, type: 2}
@@ -1279,6 +1284,7 @@ GameObject:
   - component: {fileID: 1016985108}
   - component: {fileID: 1016985110}
   - component: {fileID: 1016985111}
+  - component: {fileID: 1016985112}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -1361,6 +1367,32 @@ MonoBehaviour:
   Timescale: 60
   StartTime: 12:00 AM
   SunlightSource: {fileID: 374807710}
+--- !u!114 &1016985112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1016985107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb602d019b599a546b1d9fbd9d9dee28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AudioClips:
+  - {fileID: 8300000, guid: 15cb5da17b6760f4bb2dbc38760660fe, type: 3}
+  - {fileID: 8300000, guid: a9edb863cea07f64db7376e97fdc1ef2, type: 3}
+  - {fileID: 8300000, guid: b8661b206cfce54479aff18fdef839de, type: 3}
+  - {fileID: 8300000, guid: ff370fcefa2717d45b6c8313a8971dc0, type: 3}
+  - {fileID: 8300000, guid: 010b146d38edc6f489ab2d90fcadafe3, type: 3}
+  - {fileID: 8300000, guid: bb6a3424d537e994db5cef44041a870b, type: 3}
+  - {fileID: 8300000, guid: b701b86b13a9dca4ab00bbb4b64492e3, type: 3}
+  - {fileID: 8300000, guid: 3bc4c54e1edb7364db92af780fb8356d, type: 3}
+  - {fileID: 8300000, guid: e308a1e1665239b439b0363be2e16d1d, type: 3}
+  - {fileID: 8300000, guid: ca42061affebd494abf8d6b61ea851e2, type: 3}
+  NextMusicClip: 2
+  NextAmbientClip: 1
+  MaxSoundEffects: 32
+  SoundEffectVolume: 0.5
 --- !u!1 &1030812431
 GameObject:
   m_ObjectHideFlags: 0
