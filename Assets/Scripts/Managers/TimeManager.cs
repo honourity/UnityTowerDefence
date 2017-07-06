@@ -30,7 +30,7 @@ public class TimeManager : MonoBehaviour
 	{
 		var angle = Map(_time.Ticks % TimeSpan.TicksPerDay, 0, TimeSpan.TicksPerDay, 0, 360);
 
-		SunlightSource.transform.eulerAngles = new Vector3(angle + 90, 20, 20);
+		SunlightSource.transform.eulerAngles = new Vector3(angle + -90, 20, 20);
 	}
 
 	private void CalculateTime()
