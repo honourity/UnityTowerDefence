@@ -14,7 +14,7 @@ public class AudioManager : MonoBehaviour {
 	public enum AudioClipNames
 	{
 		None,
-		AmbientWindAtmosphere,
+		AMBWindAtmosphere,
 		MusicCamelHorizon,
 		SFXCropTaken,
 		SFXDeath1,
