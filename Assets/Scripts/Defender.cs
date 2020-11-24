@@ -1,4 +1,5 @@
 ﻿using cakeslice;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -113,7 +114,12 @@ public class Defender : Unit
 		}
 	}
 
-	private void SetupOutlineRenderers()
+    public void StopMoving()
+    {
+		NavMeshAgent.ResetPath();
+	}
+
+    private void SetupOutlineRenderers()
 	{
 		var meshRenderer = gameObject.GetComponent<MeshRenderer>();
 

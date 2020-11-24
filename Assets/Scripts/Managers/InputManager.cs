@@ -79,6 +79,10 @@ public class InputManager : MonoBehaviour
 		}
 		else if (Input.GetKeyDown(KeyCode.S))
 		{
+			GameManager.Instance.SelectedDefenders.ForEach(d => d.StopMoving());
+		}
+		else if (Input.GetKeyDown(KeyCode.Space))
+		{
 			StartCoroutine(GameManager.Instance.SpawnWave());
 		}
 	}
