@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour
 
 	public void SpawnEnemy()
 	{
-		//Instantiate(EnemyPrefab, EnemySpawn.position, EnemySpawn.rotation);
+		Instantiate(EnemyPrefab, EnemySpawn.position, EnemySpawn.rotation);
 	}
 
 	public void SelectDefender(Defender defender)
